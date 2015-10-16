@@ -43,12 +43,6 @@ angular
                 }),
                 $ocLazyLoad.load(
                 {
-                   name:'akoenig.deckgrid',
-                   files:["bower_components/angular-deckgrid/angular-deckgrid.js"
-                      ]
-                }),
-                $ocLazyLoad.load(
-                {
                    name:'toggle-switch',
                    files:["bower_components/angular-toggle-switch/angular-toggle-switch.min.js",
                           "bower_components/angular-toggle-switch/angular-toggle-switch.css"
@@ -95,6 +89,12 @@ angular
               'scripts/controllers/main.js',
               'scripts/services/article.service.js'
               ]
+            }),
+            $ocLazyLoad.load(
+            {
+               name:'angularGrid',
+               files:["js/angulargrid.min.js"
+                  ]
             })
           }
         }
