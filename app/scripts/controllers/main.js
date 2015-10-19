@@ -19,13 +19,10 @@ angular.module('sbAdminApp')
 
 	function refreshTable() {
 		$timeout(function() {
-			console.log('refresh');
 			if(angularGridInstance && angularGridInstance.gallery) {
-				console.log('refresh');
-				vm.articlesTable = vm.articles;
 				angularGridInstance.gallery.refresh();
 			}
-		}, 1);
+		});
 	}
 
 	function deleteCover(article) {
@@ -44,8 +41,6 @@ angular.module('sbAdminApp')
 		if(index != -1) { //
 			vm.articles.splice(index, 1); //
 		} //
-
-		refreshTable();
 
 		toaster.pop('success', 'Capa do artigo removida com sucesso.'); //
 	}
