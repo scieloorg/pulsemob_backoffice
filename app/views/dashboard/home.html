@@ -10,85 +10,117 @@
 			<div class="panel-heading">
 				<i class="fa fa-clock-o fa-fw"></i> Últimas capas cadastradas
 				<div class="pull-right">
-					<a ng-click="main.showAs = 'list'"><i class="fa fa-th-list"></i><a>  | 
-						<a ng-click="main.showAsTable()"><i class="fa fa-th"></i></a>
-					</div>
+					<a href ng-click="home.showAs = 'list'"><i class="fa fa-th-list"></i></a>
+					<span> | </span>
+					<a href ng-click="home.showAsTable()"><i class="fa fa-th"></i></a>
 				</div>
-				<div class="panel-body">
-					<div class="row" ng-if="main.showAs === 'list'">
-						<div class="col-md-12">
-							<div class="table-responsive">
-								<table st-table="main.articlesList" st-safe-src="main.articles" class="table table-striped table-hover">
-									<thead>
-										<tr>
-											<th class="cover-list">Capa</th>
-											<th width="20%">Revista</th>
-											<th>Artigo</th>
-											<th>Autores</th>
-											<th width="50px"></th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr ng-repeat="m in main.articlesList">
-											<td>
-												<img class="cover-list" ng-src="{{m.cover}}">
-											</td>
-											<td>{{m.magazine}}</td>
-											<td>{{m.article}}</td>
-											<td>
-												<span>
-													<span ng-repeat="a in m.authors">{{a}}<span ng-if="!$last">, </span></span>
-												</span>
-											</td>
-											<td>
-												<a class="btn btn-default pull-right" ng-click="main.deleteCover(m)">
-													<i class="fa fa-close"></i><span class="hidden-xs"> Remover</span>
-												</a>
-											</td>
-										</tr>
-										<tr ng-if="main.articlesList.length === 0" style="height: 51px;">
-											<td colspan="5">
-												Nenhum resultado encontrado.
-											</td>
-										</tr>
-									</tbody>
-									<tfoot>
-										<tr>
-											<td colspan="5" class="text-center">
-												<div st-pagination="" st-items-by-page="10" st-displayed-pages="7"></div>
-											</td>
-										</tr>
-									</tfoot>
-								</table>
+			</div>
+			<div class="panel-body">
+				<form >
+					<div class='row'>
+						<div class='col-md-3'>
+							<div class='form-group'>
+								<label>Pesquisar</label>
+								<input ng-model='home.filter.value' placeholder='Pesquisar artigos' maxlength='255' class='form-control'>
+							</div>
+						</div>
+						<div class='col-md-9'>
+							<div class='form-group'>
+								<label>&nbsp;</label>
+								<div>
+									<button class='btn btn-primary' ng-click='home.list(home.filter)'>
+										<i class='fa fa-search'></i> Buscar
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>
+				</form>
 
-					<div class="row" ng-show="main.showAs === 'table'">
-						<div class="col-md-12">
-							<div style="width: 100%">
-								<ul class="dynamic-grid" angular-grid="main.articlesTable" angular-grid-id="gallery" refresh-on-img-load="true" >
-									<li data-ng-repeat="m in main.articles" class="grid">
-										<div style="padding: 5px;">
-											<img ng-src="{{m.cover}}" class="grid-img"  />
+				<hr ng-if='home.articles' />
 
-											<h3>{{m.article}}</h3>
-											<h4>{{m.magazine}}</h4>
-											<p>
-												<span>
-													<span ng-repeat="a in m.authors">{{a}}<span ng-if="!$last">, </span></span>
-												</span>
-											</p>
-											<p class="text-center">
-												<a class="btn btn-default" ng-click="main.deleteCover(m)">
-													<i class="fa fa-close"></i><span class="hidden-xs"> Remover</span>
-												</a>
-											</p>
-											<div class="clearfix"></div>
-										</div>
-									</li>
-								</ul>
-							</div>
+				<div class="row" ng-if="home.showAs === 'list'">
+					<div class="col-md-12">
+						<div class="table-responsive">
+							<table st-table="home.articlesList" st-safe-src="home.articles" class="table table-striped table-hover">
+								<thead>
+									<tr>
+										<th class="cover-list">Capa</th>
+										<th width="20%">Revista</th>
+										<th>Artigo</th>
+										<th>Autores</th>
+										<th width="50px">Edição</th>
+										<th width="50px"></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="a in home.articlesList">
+										<td>
+											<a href ng-click='home.showDetails(a)'>
+												<img class="cover-list" ng-src="{{a.cover}}">
+											</a>
+										</td>
+										<td>{{a.magazine}}</td>
+										<td>{{a.article}}</td>
+										<td>
+											<span>
+												<span ng-repeat="a in a.authors">{{a}}<span ng-if="!$last">, </span></span>
+											</span>
+										</td>
+										<td>{{a.edition}}</td>
+										<td>
+											<button class="btn btn-default pull-right" ng-click="home.deleteCover(a)">
+												<i class="fa fa-close"></i><span class="hidden-xs"> Remover</span>
+											</button>
+										</td>
+									</tr>
+									<tr ng-if="home.articlesList.length === 0" style="height: 51px;">
+										<td colspan="6">
+											Nenhum resultado encontrado.
+										</td>
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td colspan="6" class="text-center">
+											<div st-pagination="" st-items-by-page="10" st-displayed-pages="7"></div>
+										</td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<div class="row" ng-show="home.showAs === 'table'">
+					<div class="col-md-12">
+						<div style="width: 100%">
+							<ul class="dynamic-grid" angular-grid="home.articles" angular-grid-id="gallery" refresh-on-img-load="true" >
+								<li data-ng-repeat="a in home.articles" class="grid">
+									<div style="padding: 5px;">
+										<a href ng-click='home.showDetails(a)'>
+											<img ng-src="{{a.cover}}" class="grid-img"  />
+										</a>
+
+										<h3>{{a.article}}</h3>
+										<h4>{{a.magazine}}</h4>
+										<p>
+											<span>
+												<span ng-repeat="au in a.authors">{{au}}<span ng-if="!$last">, </span></span>
+											</span>
+										</p>
+										<p ng-if='a.edition'>
+											<span>{{a.edition}} edição</span>
+										</p>
+										<p class="text-center">
+											<button class="btn btn-default" ng-click="home.deleteCover(a)">
+												<i class="fa fa-close"></i><span class="hidden-xs"> Remover</span>
+											</button>
+										</p>
+										<div class="clearfix"></div>
+									</div>
+								</li>
+							</ul>
 						</div>
 					</div>
 				</div>
@@ -96,6 +128,30 @@
 		</div>
 	</div>
 </div>
+
+<script type='text/ng-template' id='details-dialog'>
+	<br />
+
+	<div class='text-center'>
+		<img ng-src="{{home.currentArticle.cover}}" />
+	</div>
+
+	<div class='row'>
+		<div class='col-md-12'>
+			<h3>{{home.currentArticle.article}}</h3>
+			<h4>{{home.currentArticle.magazine}}</h4>
+			<p>
+				<span>
+					<span ng-repeat="a in home.currentArticle.authors">{{a}}<span ng-if="!$last">, </span></span>
+				</span>
+			</p>
+			<p ng-if='home.currentArticle.edition'>
+				<span>{{home.currentArticle.edition}} edição</span>
+			</p>
+			<small>Imagem carregada por <b>Usuário 1</b> no dia <b>20/04/2015</b>.</small>
+		</div>
+	</div>
+</script>
 
 <style>
 	.grid {
@@ -172,5 +228,9 @@
 		visibility: visible;
 		opacity: 1;
 	}
+	/*.dynamic-grid.angular-grid {
+		height: 120% !important;
+	}*/
 
 </style>
+

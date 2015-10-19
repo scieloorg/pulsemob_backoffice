@@ -134,3 +134,25 @@ table>tbody>tr>td {
 	animation: ngdialog-fadeout 0.3s forwards !important;
 }
 
+
+/*@media (max-width: 768px) {
+	.ngdialog.ngdialog-theme-default .ngdialog-content {
+		width: 100% !important;
+		border-radius: 0 !important;
+	}
+}
+@media (min-width: 768px) {
+	.ngdialog.ngdialog-theme-default .ngdialog-content {
+		width: 90% !important;
+	}
+}
+@media (min-width: 992px) {
+	.ngdialog.ngdialog-theme-default .ngdialog-content {
+		width: 1070px !important;
+	}
+}
+@media (min-width: 1200px) {
+	.ngdialog.ngdialog-theme-default .ngdialog-content {
+		width: 970px !important;
+	}
+}*/

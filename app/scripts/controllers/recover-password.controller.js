@@ -7,13 +7,14 @@ angular.module('sbAdminApp')
 	vm.recover = recover;
 
 	function recover(email) {
-		console.log(email);
 		/*UserService.recoverPassword({ param2: email }).$promise.then(function(response) {
 			toaster.pop('success', 'Siga as instruções enviadas por e-mail para recuperar a senha.');
+		
+			$state.go('login');
 		});*/
 
 		toaster.pop('success', 'Siga as instruções enviadas por e-mail para recuperar a senha.'); //
 		
-		$state.go('login');
+		$state.go('login'); //
 	}
 }]);

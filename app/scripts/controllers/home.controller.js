@@ -1,15 +1,26 @@
 'use strict';
 
 angular.module('sbAdminApp')
-.controller('MainCtrl', ['$scope', '$timeout', 'ArticleService', 'angularGridInstance', 'toaster', function($scope, $timeout, ArticleService, angularGridInstance, toaster) {
+.controller('HomeCtrl', ['$scope', '$timeout', 'ArticleService', 'angularGridInstance', 'ngDialog', 'toaster', function($scope, $timeout, ArticleService, angularGridInstance, ngDialog, toaster) {
 	var vm = this;
 
 	vm.init = init;
 	vm.listLasts = listLasts;
 	vm.deleteCover = deleteCover;
 	vm.showAsTable = showAsTable;
+	vm.showDetails = showDetails;
+	vm.listLastsByFilter = listLastsByFilter;
 
 	init();
+
+	function showDetails(article) {
+		vm.currentArticle = article;
+		
+		vm.detailsDialog = ngDialog.open({
+			template: 'details-dialog',
+			scope: $scope
+		});
+	}
 
 	function showAsTable() {
 		vm.showAs = 'table';
@@ -45,6 +56,10 @@ angular.module('sbAdminApp')
 		toaster.pop('success', 'Capa do artigo removida com sucesso.'); //
 	}
 
+	function listLastsByFilter() {
+		return listLasts(); //
+	}
+
 	function listLasts() {
 		/*ArticleService.listLasts().$promise.then(function(response) {
 			vm.articles = response.data;
@@ -58,7 +73,7 @@ angular.module('sbAdminApp')
 	function init() {
 		listLasts();
 
-		vm.showAs = 'table';
+		vm.showAs = 'list';
 	}
 }]);
 

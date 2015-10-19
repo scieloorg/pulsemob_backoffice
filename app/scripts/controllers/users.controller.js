@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sbAdminApp')
-.controller('UserCtrl', ['$scope', 'UserService', 'ProfileService', 'ngDialog', 'toaster', function($scope, UserService, ProfileService, ngDialog, toaster) {
+.controller('UsersCtrl', ['$scope', 'UserService', 'ProfileService', 'ngDialog', 'toaster', function($scope, UserService, ProfileService, ngDialog, toaster) {
 	var vm = this;
 
 	vm.init = init;
@@ -104,7 +104,7 @@ angular.module('sbAdminApp')
 
 		vm.users = UserService.list(); //
 
-		vm.usersTable = [].concat(vm.users);
+		vm.usersList = [].concat(vm.users);
 	}
 
 	function init() {
