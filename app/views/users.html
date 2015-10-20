@@ -42,7 +42,7 @@
 											</button>
 										</td>
 										<td>
-											<button class='btn btn-default pull-right' ng-click='user.remove(u)'>
+											<button class='btn btn-default pull-right' ng-click='user.prepareRemove(u)'>
 												<i class='fa fa-close'></i><span class='hidden-xs'> Remover</span>
 											</button>
 										</td>
@@ -161,4 +161,11 @@
 		<button type='submit' class='btn btn-primary' ng-click='user.edit(user.user)'>Salvar</button>
 		<button class='btn btn-default' ng-click='closeThisDialog()'>Fechar</button>
 	</form>
+</script>
+
+<script type="text/ng-template" id="remove-dialog">
+	<h5>Confirma a exclusão do usuário?</h5>
+
+	<button type="button" ng-click="confirm()" class="btn btn-primary">Sim</button>
+	<button type="button" ng-click="closeThisDialog()" class="btn btn-default">Não</button>
 </script>

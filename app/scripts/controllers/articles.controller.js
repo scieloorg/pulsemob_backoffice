@@ -10,6 +10,7 @@ angular.module('sbAdminApp')
 	vm.remove = remove;
 	vm.showDetails = showDetails;
 	vm.showEditCover = showEditCover;
+	vm.prepareRemove = prepareRemove;
 	vm.toggleAdvancedSearch = toggleAdvancedSearch;
 
 	vm.init();
@@ -38,6 +39,17 @@ angular.module('sbAdminApp')
 		vm.filter = {
 			value: vm.filter.value
 		};
+	}
+
+	function prepareRemove(article) {
+		ngDialog.openConfirm({
+			template: 'remove-dialog',
+			closeByDocument: true,
+			closeByEscape: true,
+			scope: $scope
+		}).then(function () {
+			remove(article);
+		});
 	}
 
 	function remove(article) {

@@ -11,6 +11,7 @@ angular.module('sbAdminApp')
 	vm.remove = remove;
 	vm.prepareEdit = prepareEdit;
 	vm.prepareCreate = prepareCreate;
+	vm.prepareRemove = prepareRemove;
 	vm.loadMagazines = loadMagazines;
 
 	vm.init();
@@ -24,10 +25,7 @@ angular.module('sbAdminApp')
 
 		vm.newDialog = ngDialog.open({
 			template: 'new-dialog',
-			closeByDocument: false,
-			closeByEscape: true,
-			scope: $scope,
-			closeByDocument: false
+			scope: $scope
 		});
 	}
 
@@ -52,10 +50,7 @@ angular.module('sbAdminApp')
 
 		vm.editDialog = ngDialog.open({
 			template: 'edit-dialog',
-			closeByDocument: false,
-			closeByEscape: true,
-			scope: $scope,
-			closeByDocument: false
+			scope: $scope
 		});
 	}
 
@@ -75,6 +70,17 @@ angular.module('sbAdminApp')
 		}
 
 		vm.editDialog.close();
+	}
+
+	function prepareRemove(user) {
+		ngDialog.openConfirm({
+			template: 'remove-dialog',
+			closeByDocument: true,
+			closeByEscape: true,
+			scope: $scope
+		}).then(function () {
+			remove(user);
+		});
 	}
 
 	function remove(user) {

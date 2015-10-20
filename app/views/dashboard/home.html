@@ -56,7 +56,7 @@
 								<tbody>
 									<tr ng-repeat="a in home.articlesList">
 										<td>
-											<a href ng-click='home.showDetails(a)'>
+											<a href ng-click='home.showCoverDetails(a)'>
 												<img class="cover-list" ng-src="{{a.cover}}">
 											</a>
 										</td>
@@ -69,7 +69,7 @@
 										</td>
 										<td>{{a.edition}}</td>
 										<td>
-											<button class="btn btn-default pull-right" ng-click="home.deleteCover(a)">
+											<button class="btn btn-default pull-right" ng-click="home.prepareRemoveCover(a)">
 												<i class="fa fa-close"></i><span class="hidden-xs"> Remover</span>
 											</button>
 										</td>
@@ -97,8 +97,8 @@
 						<div style="width: 100%">
 							<ul class="dynamic-grid" angular-grid="home.articles" angular-grid-id="gallery" refresh-on-img-load="true" >
 								<li data-ng-repeat="a in home.articles" class="grid">
-									<div style="padding: 5px;">
-										<a href ng-click='home.showDetails(a)'>
+									<div class='text-center' style="padding: 5px;">
+										<a href ng-click='home.showCoverDetails(a)'>
 											<img ng-src="{{a.cover}}" class="grid-img"  />
 										</a>
 
@@ -113,7 +113,7 @@
 											<span>{{a.edition}} edição</span>
 										</p>
 										<p class="text-center">
-											<button class="btn btn-default" ng-click="home.deleteCover(a)">
+											<button class="btn btn-default" ng-click="home.prepareRemoveCover(a)">
 												<i class="fa fa-close"></i><span class="hidden-xs"> Remover</span>
 											</button>
 										</p>
@@ -137,7 +137,7 @@
 	</div>
 
 	<div class='row'>
-		<div class='col-md-12'>
+		<div class='col-md-12 text-center'>
 			<h3>{{home.currentArticle.article}}</h3>
 			<h4>{{home.currentArticle.magazine}}</h4>
 			<p>
@@ -234,3 +234,9 @@
 
 </style>
 
+<script type="text/ng-template" id="remove-dialog">
+	<h5>Confirma a exclusão da capa do artigo?</h5>
+
+	<button type="button" ng-click="confirm()" class="btn btn-primary">Sim</button>
+	<button type="button" ng-click="closeThisDialog()" class="btn btn-default">Não</button>
+</script>

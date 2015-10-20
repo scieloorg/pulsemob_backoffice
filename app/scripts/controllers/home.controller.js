@@ -6,14 +6,15 @@ angular.module('sbAdminApp')
 
 	vm.init = init;
 	vm.listLasts = listLasts;
-	vm.deleteCover = deleteCover;
+	vm.removeCover = removeCover;
 	vm.showAsTable = showAsTable;
-	vm.showDetails = showDetails;
+	vm.showCoverDetails = showCoverDetails;
+	vm.prepareRemoveCover = prepareRemoveCover;
 	vm.listLastsByFilter = listLastsByFilter;
 
 	init();
 
-	function showDetails(article) {
+	function showCoverDetails(article) {
 		vm.currentArticle = article;
 		
 		vm.detailsDialog = ngDialog.open({
@@ -36,7 +37,18 @@ angular.module('sbAdminApp')
 		});
 	}
 
-	function deleteCover(article) {
+	function prepareRemoveCover(article) {
+		ngDialog.openConfirm({
+			template: 'remove-dialog',
+			closeByDocument: true,
+			closeByEscape: true,
+			scope: $scope
+		}).then(function () {
+			removeCover(article);
+		});
+	}
+
+	function removeCover(article) {
 		/*ArticleService.deleteCover({ param2: article.id }).$promise.then(function() {
 			var index = vm.articles.indexOf(article);
 			
