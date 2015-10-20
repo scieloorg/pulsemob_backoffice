@@ -80,8 +80,8 @@
 						<label>Nome</label>
 						<input ng-model='user.user.name' maxlength='255' class='form-control'>
 					</div>
-					<div class='col-md-12'>
-					</div>
+				</div>
+				<div class='col-md-12'>
 					<div class='form-group'>
 						<label>E-mail</label>
 						<input ng-model='user.user.email' maxlength='255' class='form-control'>
@@ -95,24 +95,32 @@
 						</select>
 					</div>
 				</div>
-				<!--<div class='col-md-6'>
+				<div class='col-md-12'>
 					<div class='form-group'>
-						<label>Senha</label>
-						<input ng-model='user.user.password' type='password' maxlength='255' class='form-control'>
+						<label>Revistas</label>
+						<tags-input ng-model='user.user.magazines' replace-spaces-with-dashes='false' display-property='name' placeholder='Adicione uma revista'>
+							<auto-complete source='user.loadMagazines($query)' min-length='1'></auto-complete>
+						</tags-input>
 					</div>
 				</div>
-				<div class='col-md-6'>
-					<div class='form-group'>
-						<label>Confirmar senha</label>
-						<input ng-model='user.user.confirm_password' type='password' maxlength='255' class='form-control'>
-					</div>
-				</div>-->
+			<!--<div class='col-md-6'>
+				<div class='form-group'>
+					<label>Senha</label>
+					<input ng-model='user.user.password' type='password' maxlength='255' class='form-control'>
+				</div>
 			</div>
-		</p>
+			<div class='col-md-6'>
+				<div class='form-group'>
+					<label>Confirmar senha</label>
+					<input ng-model='user.user.confirm_password' type='password' maxlength='255' class='form-control'>
+				</div>
+			</div>-->
+		</div>
+	</p>
 
-		<button type='submit' class='btn btn-primary' ng-click='user.create(user.user)'>Salvar</button>
-		<button class='btn btn-default' ng-click='closeThisDialog()'>Fechar</button>
-	</form>
+	<button type='submit' class='btn btn-primary' ng-click='user.create(user.user)'>Salvar</button>
+	<button class='btn btn-default' ng-click='closeThisDialog()'>Fechar</button>
+</form>
 </script>
 
 <script type='text/ng-template' id='edit-dialog'>
@@ -126,8 +134,8 @@
 						<label>Nome</label>
 						<input ng-model='user.user.name' maxlength='255' class='form-control'>
 					</div>
-					<div class='col-md-12'>
-					</div>
+				</div>
+				<div class='col-md-12'>
 					<div class='form-group'>
 						<label>E-mail</label>
 						<input ng-model='user.user.email' maxlength='255' class='form-control'>
@@ -137,6 +145,14 @@
 					<div class='form-group'>
 						<label>Perfil</label>
 						<select class='form-control' ng-model='user.user.profile' ng-options='profile as (profile | profile) for profile in user.profiles'></select>
+					</div>
+				</div>
+				<div class='col-md-12'>
+					<div class='form-group'>
+						<label>Revistas</label>
+						<tags-input ng-model='user.user.magazines' replace-spaces-with-dashes='false' display-property='name' placeholder='Adicione uma revista'>
+							<auto-complete source='user.loadMagazines($query)' min-length='1'></auto-complete>
+						</tags-input>
 					</div>
 				</div>
 			</div>

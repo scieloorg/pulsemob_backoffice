@@ -6,13 +6,31 @@ angular.module('sbAdminApp')
 
 	vm.init = init;
 	vm.list = list;
-	vm.edit = edit;
+	vm.save = save;
 	vm.remove = remove;
 	vm.showDetails = showDetails;
-	vm.prepareEdit = prepareEdit;
+	vm.showEditCover = showEditCover;
 	vm.toggleAdvancedSearch = toggleAdvancedSearch;
 
 	vm.init();
+
+	///
+	$scope.myImage='';
+	$scope.myCroppedImage='';
+
+	var handleFileSelect=function(evt) {
+		var file=evt.currentTarget.files[0];
+		var reader = new FileReader();
+		reader.onload = function (evt) {
+			$scope.$apply(function($scope){
+				console.log(evt.target.result);
+				$scope.myImage=evt.target.result;
+			});
+		};
+		reader.readAsDataURL(file);
+	};
+	angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
+	///
 
 	function toggleAdvancedSearch() {
 		vm.advancedSearch = !vm.advancedSearch
@@ -29,7 +47,7 @@ angular.module('sbAdminApp')
 			toaster.pop('success', 'Capa do artigo removida com sucesso.');
 		});*/
 
-		article.cover = 'http://dummyimage.com/400x300/F44336/fff.png&text=x'; //
+		article.cover = 'http://dummyimage.com/360x480/F44336/fff.png&text=x'; //
 
 		toaster.pop('success', 'Capa do artigo removida com sucesso.'); //
 	}
@@ -43,12 +61,20 @@ angular.module('sbAdminApp')
 		});
 	}
 
-	function prepareEdit(article) {
+	function showEditCover(article) {
+		vm.currentArticle = article;
 
+		vm.editDialog = ngDialog.open({
+			template: 'edit-dialog',
+			className: 'ngdialog-theme-default cover-dialog',
+			scope: $scope
+		});
 	}
 
-	function edit(article) {
+	function save(article) {
+		vm.editDialog.close();
 
+		toaster.pop('success', 'Capa do artigo salva com sucesso.'); //
 	}
 
 	function listMagazines() {
@@ -68,7 +94,6 @@ angular.module('sbAdminApp')
 	}
 
 	function list(filter) {
-		console.log('list !!!');
 		/*ArticleService.list().$promise.then(function(response) {
 			vm.articles = response;
 		});*/
@@ -80,6 +105,7 @@ angular.module('sbAdminApp')
 
 	function init() {
 		vm.filter = {};
+		vm.example = 'http://localhost:9000/img/exemplo.jpg';
 
 		//list();
 		listMagazines();

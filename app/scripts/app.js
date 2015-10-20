@@ -16,7 +16,9 @@
  	'angular-loading-bar',
  	'smart-table',
  	'ngDialog',
- 	'toaster'
+ 	'toaster',
+ 	'ngImgCrop',
+ 	'ngTagsInput'
  	])
  .config(['$stateProvider','$urlRouterProvider','$ocLazyLoadProvider',function ($stateProvider,$urlRouterProvider,$ocLazyLoadProvider) {
 
@@ -110,6 +112,7 @@
 					'scripts/controllers/users.controller.js',
 					'scripts/services/user.service.js',
 					'scripts/services/profile.service.js',
+					'scripts/services/magazine.service.js',
 					'scripts/filters/profile.filter.js'
 					]
 				})

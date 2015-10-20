@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sbAdminApp')
-.controller('UsersCtrl', ['$scope', 'UserService', 'ProfileService', 'ngDialog', 'toaster', function($scope, UserService, ProfileService, ngDialog, toaster) {
+.controller('UsersCtrl', ['$scope', 'UserService', 'ProfileService', 'MagazineService', 'ngDialog', 'toaster', function($scope, UserService, ProfileService, MagazineService, ngDialog, toaster) {
 	var vm = this;
 
 	vm.init = init;
@@ -11,9 +11,13 @@ angular.module('sbAdminApp')
 	vm.remove = remove;
 	vm.prepareEdit = prepareEdit;
 	vm.prepareCreate = prepareCreate;
-	vm.listProfiles = listProfiles;
+	vm.loadMagazines = loadMagazines;
 
 	vm.init();
+
+	function loadMagazines(query) {
+		return vm.magazines;
+	};
 
 	function prepareCreate() {
 		vm.user = {};
@@ -97,9 +101,17 @@ angular.module('sbAdminApp')
 		vm.profiles = ProfileService.list();
 	}
 
+	function listMagazines() {
+		/*MagazineService.list().$promise.then(function(response) {
+			vm.magazines = response;
+		});*/
+
+		vm.magazines = MagazineService.list(); //
+	}
+
 	function list() {
 		/*UserService.list().$promise.then(function(response) {
-			vm.users = response.data;
+			vm.users = response;
 		});*/
 
 		vm.users = UserService.list(); //
@@ -110,5 +122,6 @@ angular.module('sbAdminApp')
 	function init() {
 		list();
 		listProfiles();
+		listMagazines();
 	}
 }]);

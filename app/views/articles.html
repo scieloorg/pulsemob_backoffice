@@ -23,16 +23,17 @@
 									<button class='btn btn-primary' ng-click='article.list(article.filter)'>
 										<i class='fa fa-search'></i> Buscar
 									</button>
-									<a href class='btn btn-default' ng-click='article.toggleAdvancedSearch()'>
+									<!-- <a href class='btn btn-default' ng-click='article.toggleAdvancedSearch()'>
 										<i class='fa fa-chevron-down' ng-show='!article.advancedSearch'></i> 
 										<i class='fa fa-chevron-up' ng-show='article.advancedSearch'></i> 
 										Busca Avançada
-									</a>
+									</a> -->
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class='row' ng-show='article.advancedSearch'>
+					<!-- <div class='row' ng-show='article.advancedSearch'> -->
+					<div class='row'>
 						<div class='col-md-3'>
 							<div class='form-group'>
 								<label>Categoria</label>
@@ -49,9 +50,10 @@
 							<div class='form-group'>
 								<label>&nbsp;</label>
 								<div>
-									<div class='checkbox'>
-										<label>
-											<input ng-model='article.filter.onlyWithoutCover' type='checkbox'> Apenas artigos sem capa
+									<div class='checkbox checkbox-default'>
+										<input id='onlyWithoutCover' ng-model='article.filter.onlyWithoutCover' type='checkbox'>
+										<label for='onlyWithoutCover'>
+											Apenas artigos sem capa
 										</label>
 									</div>
 								</div>
@@ -87,7 +89,7 @@
 										<th width='20%'>Revista</th>
 										<th>Artigo</th>
 										<th>Autores</th>
-										<th width="50px">Edição</th>
+										<th width='50px'>Edição</th>
 										<th width='50px'></th>
 										<th width='50px'></th>
 									</tr>
@@ -108,7 +110,7 @@
 										</td>
 										<td>{{a.edition}}</td>
 										<td>
-											<button class='btn btn-default pull-right' ng-click='article.edit(a)'>
+											<button class='btn btn-default pull-right' ng-click='article.showEditCover(a)'>
 												<i class='fa fa-pencil'></i><span class='hidden-xs'> Editar</span>
 											</button>
 										</td>
@@ -144,7 +146,7 @@
 	<br />
 
 	<div class='text-center'>
-		<img ng-src="{{article.currentArticle.cover}}" />
+		<img ng-src='{{article.currentArticle.cover}}' />
 	</div>
 
 	<div class='row'>
@@ -153,7 +155,7 @@
 			<h4>{{article.currentArticle.magazine}}</h4>
 			<p>
 				<span>
-					<span ng-repeat="a in article.currentArticle.authors">{{a}}<span ng-if="!$last">, </span></span>
+					<span ng-repeat='a in article.currentArticle.authors'>{{a}}<span ng-if='!$last'>, </span></span>
 				</span>
 			</p>
 			<p ng-if='article.currentArticle.edition'>
@@ -163,3 +165,75 @@
 		</div>
 	</div>
 </script>
+
+<script type='text/ng-template' id='edit-dialog'>
+	<br />
+
+	<div class='row'>
+		<div class='col-md-6'>
+			<h5 class='text-center'>Imagem carregada</h5>
+			<div class='cropArea'>
+				<img-crop image='article.example' result-image='myCroppedImage' area-type='square'></img-crop>
+			</div>
+		</div>
+		<div class='col-md-6'>
+			<h5 class='text-center'>Visualização da capa</h5>
+			<div class='pull-left'>
+				<img ng-src='{{myCroppedImage}}' style='width: 360px; height: 480px;' />
+			</div>
+		</div>
+	</div>
+
+	<br />
+
+	<div class='row'>
+		<div class='col-md-12'>
+			<div class='box-placeholder'>
+				<h5>Arraste uma nova capa aqui</h5>
+			</div>
+		</div>
+	</div>
+
+	<div class='row'>
+		<div class='col-md-12'>
+			<button class='btn btn-primary' ng-click='article.save(article.currentArticle)'>Salvar</button>
+			<button class='btn btn-default' ng-click='closeThisDialog()'>Fechar</button>
+		</div>
+	</div>
+
+	<style>
+		.cropArea {
+			//background: rgba(0, 0, 0, .54);
+			//overflow: hidden;
+			border: 1px solid #ccc;
+			background: #f1f1f1;
+			width:360px;
+			height:480px;
+		}
+
+		.box-placeholder {
+			margin-bottom: 15px;
+			padding: 20px;
+			border: 1px dashed #dddddd;
+			background: #fafafa;
+			color: #444444;
+		}
+		.box-placeholder > :last-child {
+			margin-bottom: 0;
+		}
+		.box-placeholder-lg {
+			padding-top: 80px;
+			padding-bottom: 80px;
+		}
+
+		.ngdialog.ngdialog-theme-default {
+			padding-top: 100px;
+		}
+		
+		.ngdialog.cover-dialog .ngdialog-content{
+			width : 800px;
+		}
+	</style>
+</script>
+
+
