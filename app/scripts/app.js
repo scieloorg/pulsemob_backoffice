@@ -39,6 +39,7 @@
  				{
  					name:'sbAdminApp',
  					files:[
+ 					'scripts/controllers/header.controller.js',
  					'scripts/directives/header/header.js',
  					'scripts/directives/sidebar/sidebar.js'
  					]

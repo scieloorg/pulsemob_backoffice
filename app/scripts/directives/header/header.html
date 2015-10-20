@@ -1,20 +1,68 @@
-<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-    <div class="navbar-header">
+<div>
+	<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+		<div class="navbar-header">
 
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">SciELO - Scientific Electronic Library Online</a>
-    </div>
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#">SciELO - Scientific Electronic Library Online</a>
+		</div>
 
-    <ul class="nav navbar-top-links navbar-right">
-        <li>
-            <a ui-sref="login"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
-        </li>
-    </ul>
+		<ul class="nav navbar-top-links navbar-right">
+			<li class="dropdown">
+				<a href class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+					<i class="fa fa-user fa-fw"></i> Felipe
+					<i class="fa fa-caret-down"></i>
+				</a>
+				<ul class="dropdown-menu dropdown-user">
+					<li>
+						<a href ng-click='header.prepareChangePassword()'>
+							<i class="fa fa-key fa-fw"></i> Alterar Senha
+						</a>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<a ui-sref="login"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
 
-    <sidebar></sidebar>
-</nav>
+		<sidebar></sidebar>
+	</nav>
+
+	<script type='text/ng-template' id='change-password-dialog'>
+		<h4>Alterar Senha</h4>
+
+		<form name='form' role='form'>
+			<p>
+				<div class='row'>
+					<div class='col-md-12'>
+						<div class='form-group'>
+							<label>Senha antiga</label>
+							<input type='password' ng-model='header.password.old' maxlength='255' class='form-control'>
+						</div>
+					</div>
+					<div class='col-md-12'>
+						<div class='form-group'>
+							<label>Nova senha</label>
+							<input type='password' ng-model='header.password.new' maxlength='255' class='form-control'>
+						</div>
+					</div>
+					<div class='col-md-12'>
+						<div class='form-group'>
+							<label>Confirmar nova senha</label>
+							<input type='password' ng-model='header.password.confirm' maxlength='255' class='form-control'>
+						</div>
+					</div>
+				</div>
+			</p>
+
+			<button type='submit' class='btn btn-primary' ng-click='header.changePassword(header.password)'>Salvar</button>
+			<button class='btn btn-default' ng-click='closeThisDialog()'>Fechar</button>
+		</form>
+	</script>
+</div>
