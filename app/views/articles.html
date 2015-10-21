@@ -34,19 +34,19 @@
 					</div>
 					<!-- <div class='row' ng-show='article.advancedSearch'> -->
 					<div class='row'>
-						<div class='col-md-3'>
+						<div class='col-md-4'>
 							<div class='form-group'>
 								<label>Categoria</label>
 								<select class='form-control' ng-model='article.filter.category' ng-options='category.id as category.name for category in article.categories' />
 							</div>
 						</div>
-						<div class='col-md-3'>
+						<div class='col-md-4'>
 							<div class='form-group'>
 								<label>Revista</label>
 								<input type='text' ng-model='article.filter.magazine' typeahead='magazine.name for magazine in article.magazines | filter:$viewValue | limitTo:8' class='form-control'>
 							</div>
 						</div>
-						<div class='col-md-3'>
+						<div class='col-md-4'>
 							<div class='form-group'>
 								<label>&nbsp;</label>
 								<div>

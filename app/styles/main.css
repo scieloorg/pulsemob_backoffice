@@ -134,7 +134,6 @@ table>tbody>tr>td {
 	animation: ngdialog-fadeout 0.3s forwards !important;
 }
 
-
 /*@media (max-width: 768px) {
 	.ngdialog.ngdialog-theme-default .ngdialog-content {
 		width: 100% !important;
