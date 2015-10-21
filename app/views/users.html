@@ -14,7 +14,7 @@
 							<table st-table='user.usersList' st-safe-src='user.users' class='table table-striped table-hover'>
 								<thead>
 									<tr>
-										<th colspan='4'>
+										<th colspan='5'>
 											<input st-search='' st-delay='0' class='form-control' placeholder='Pesquisar' type='text' style='width: 300px' />
 										</th>
 										<th width='50px'>
@@ -24,9 +24,10 @@
 										</th>
 									</tr>
 									<tr>
-										<th>Nome</th>
-										<th width='20%'>E-mail</th>
-										<th width='20%'>Perfil</th>
+										<th width='20%'>Nome</th>
+										<th width='15%'>E-mail</th>
+										<th width='10%'>Perfil</th>
+										<th >Revistas</th>
 										<th width='50px'></th>
 										<th width='50px'></th>
 									</tr>
@@ -36,6 +37,11 @@
 										<td>{{u.name}}</td>
 										<td>{{u.email}}</td>
 										<td>{{u.profile | profile}}</td>
+										<td>
+											<span ng-repeat="m in u.magazines | orderBy:'name'">
+												{{m.name}}<span ng-if="!$last">, </span>
+											</span>
+										</td>
 										<td>
 											<button class='btn btn-default pull-right' ng-click='user.prepareEdit(u)'>
 												<i class='fa fa-pencil'></i><span class='hidden-xs'> Editar</span>
@@ -48,14 +54,14 @@
 										</td>
 									</tr>
 									<tr ng-if='user.usersList.length === 0' style='height: 51px;'>
-										<td colspan='5'>
+										<td colspan='6'>
 											Nenhum resultado encontrado.
 										</td>
 									</tr>
 								</tbody>
 								<tfoot>
 									<tr>
-										<td colspan='5' class='text-center'>
+										<td colspan='6' class='text-center'>
 											<div st-pagination='' st-items-by-page='10' st-displayed-pages='7'></div>
 										</td>
 									</tr>
