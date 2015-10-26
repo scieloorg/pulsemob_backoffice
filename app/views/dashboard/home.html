@@ -45,11 +45,15 @@
 							<table st-table="home.articlesList" st-safe-src="home.articles" class="table table-striped table-hover">
 								<thead>
 									<tr>
+										<th colspan='5'>
+											<input st-search='' st-delay='0' class='form-control' placeholder='Filtrar' type='text' style='width: 300px' />
+										</th>
+									</tr>
+									<tr>
 										<th class="cover-list">Capa</th>
-										<th width="20%">Revista</th>
-										<th>Artigo</th>
-										<th>Autores</th>
-										<th width="50px">Edição</th>
+										<th>Artigos</th>
+										<th width="20%">Edição</th>
+										<th width="140px">Data de Upload</th>
 										<th width="50px"></th>
 									</tr>
 								</thead>
@@ -60,14 +64,21 @@
 												<img class="cover-list" ng-src="{{a.cover}}">
 											</a>
 										</td>
-										<td>{{a.magazine}}</td>
-										<td>{{a.article}}</td>
 										<td>
-											<span>
-												<span ng-repeat="a in a.authors">{{a}}<span ng-if="!$last">, </span></span>
-											</span>
+											<h4>{{a.article}}</h4>
+											<h5>{{a.magazine}}</h5>
+											<p>
+												<span>
+													<span ng-repeat="a in a.authors">{{a}}<span ng-if="!$last">, </span></span>
+												</span>
+											</p>
 										</td>
-										<td>{{a.edition}}</td>
+										<td>
+											<p>Ano: {{a.editionYear}}</p>
+											<p>Volume: {{a.editionVolume}}</p>
+											<p>Número: {{a.editionNumber}}</p>
+										</td>
+										<td>{{a.uploadDate}}</td>
 										<td>
 											<button class="btn btn-default pull-right" ng-click="home.prepareRemoveCover(a)">
 												<i class="fa fa-close"></i><span class="hidden-xs"> Remover</span>
@@ -75,14 +86,14 @@
 										</td>
 									</tr>
 									<tr ng-if="home.articlesList.length === 0" style="height: 51px;">
-										<td colspan="6">
+										<td colspan="5">
 											Nenhum resultado encontrado.
 										</td>
 									</tr>
 								</tbody>
 								<tfoot>
 									<tr>
-										<td colspan="6" class="text-center">
+										<td colspan="4" class="text-center">
 											<div st-pagination="" st-items-by-page="10" st-displayed-pages="7"></div>
 										</td>
 									</tr>
@@ -109,8 +120,11 @@
 												<span ng-repeat="au in a.authors">{{au}}<span ng-if="!$last">, </span></span>
 											</span>
 										</p>
-										<p ng-if='a.edition'>
-											<span>{{a.edition}} edição</span>
+										<p>
+											Ano {{a.editionYear}} - Volume {{a.editionVolume}} - Número {{a.editionNumber}}
+										</p>
+										<p>
+											<small><b>Usuário 1</b> - <b>{{a.uploadDate}}</b></small>
 										</p>
 										<p class="text-center">
 											<button class="btn btn-default" ng-click="home.prepareRemoveCover(a)">
@@ -145,10 +159,10 @@
 					<span ng-repeat="a in home.currentArticle.authors">{{a}}<span ng-if="!$last">, </span></span>
 				</span>
 			</p>
-			<p ng-if='home.currentArticle.edition'>
-				<span>{{home.currentArticle.edition}} edição</span>
+			<p>
+				Ano {{home.currentArticle.editionYear}} - Volume {{home.currentArticle.editionVolume}} - Número {{home.currentArticle.editionNumber}}
 			</p>
-			<small>Imagem carregada por <b>Usuário 1</b> no dia <b>20/04/2015</b>.</small>
+			<small>Imagem carregada por <b>Usuário 1</b> no dia <b>{{home.currentArticle.uploadDate}}</b>.</small>
 		</div>
 	</div>
 </script>

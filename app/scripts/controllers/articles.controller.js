@@ -8,6 +8,7 @@ angular.module('sbAdminApp')
 	vm.list = list;
 	vm.save = save;
 	vm.remove = remove;
+	vm.selectRow = selectRow;
 	vm.showDetails = showDetails;
 	vm.showEditCover = showEditCover;
 	vm.prepareRemove = prepareRemove;
@@ -32,6 +33,18 @@ angular.module('sbAdminApp')
 	};
 	angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
 	///
+
+	function selectRow(article) {
+		article.selected = !article.selected;
+
+		vm.hasSelectedRow = false;
+
+		angular.forEach(vm.articles, function(article, key) {
+			vm.hasSelectedRow = vm.hasSelectedRow || article.selected;
+		});
+
+		console.log(vm.hasSelectedRow);
+	}
 
 	function toggleAdvancedSearch() {
 		vm.advancedSearch = !vm.advancedSearch
