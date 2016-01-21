@@ -1,25 +1,32 @@
 'use strict';
 
 angular.module('sbAdminApp')
-.service('MagazineService', ['$resource', function($resource) {
-	/*return $resource($rootScope.app.WS + '/profile.svc/:param1:param2', {
+.service('MagazineService', ['$resource', '$rootScope', function($resource, $rootScope) {
+	return $resource($rootScope.app.WS + '/magazines/:param1:param2', {
 		param1 : "@param1",
 		param2 : "@param2",
 	}, {
 		'listLasts': {
-			method: 'GET'
+			method: 'GET',
 			params: {
 				param1: "lasts"
 			}
 		},
+		'list': {
+			method: 'GET',
+			isArray: true,
+			params: {
+				param1: "list"
+			}
+		},
 		'deleteCover': {
-			method: 'DELETE'
+			method: 'DELETE',
 			params: {
 				param1: "cover"
 			}
 		}
 
-	});*/
+	});
 
 	var list = [
 		{	id: 1,	name: 'Fundação Odontológica de Ribeirão Preto'	},

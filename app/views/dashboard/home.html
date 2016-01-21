@@ -61,12 +61,12 @@
 									<tr ng-repeat="a in home.articlesList">
 										<td>
 											<a href ng-click='home.showCoverDetails(a)'>
-												<img class="cover-list" ng-src="{{a.cover}}">
+												<img class="cover-list" ng-src="{{home.coverPath(a.id)}}">
 											</a>
 										</td>
 										<td>
-											<h4>{{a.article}}</h4>
-											<h5>{{a.magazine}}</h5>
+											<h4>{{a.original_title}}</h4>
+											<h5>{{a.journal_title}}</h5>
 											<p>
 												<span>
 													<span ng-repeat="a in a.authors">{{a}}<span ng-if="!$last">, </span></span>
@@ -74,11 +74,11 @@
 											</p>
 										</td>
 										<td>
-											<p>Ano: {{a.editionYear}}</p>
-											<p>Volume: {{a.editionVolume}}</p>
-											<p>Número: {{a.editionNumber}}</p>
+											<p>Ano: {{a.publication_date | date:'yyyy'}}</p>
+											<p>Volume: {{a.journal_volume}}</p>
+											<p>Número: {{a.journal_number}}</p>
 										</td>
-										<td>{{a.uploadDate}}</td>
+										<td>{{a.image_upload_date | date: 'dd/MM/yyyy @ HH:mm'}}</td>
 										<td>
 											<button class="btn btn-default pull-right" ng-click="home.prepareRemoveCover(a)">
 												<i class="fa fa-close"></i><span class="hidden-xs"> Remover</span>
@@ -110,7 +110,7 @@
 								<li data-ng-repeat="a in home.articles" class="grid">
 									<div class='text-center' style="padding: 5px;">
 										<a href ng-click='home.showCoverDetails(a)'>
-											<img ng-src="{{a.cover}}" class="grid-img"  />
+											<img ng-src="{{home.coverPath(a.id)}}" class="grid-img"  />
 										</a>
 
 										<h3>{{a.article}}</h3>
@@ -121,10 +121,10 @@
 											</span>
 										</p>
 										<p>
-											Ano {{a.editionYear}} - Volume {{a.editionVolume}} - Número {{a.editionNumber}}
+											Ano {{a.publication_date | date:'yyyy'}} - Volume {{a.journal_volume}} - Número {{a.journal_number}}
 										</p>
 										<p>
-											<small><b>Usuário 1</b> - <b>{{a.uploadDate}}</b></small>
+											<small><b>{{a.image_uploader}}</b> - <b>{{a.image_upload_date | date: 'dd/MM/yyyy @ HH:mm'}}</b></small>
 										</p>
 										<p class="text-center">
 											<button class="btn btn-default" ng-click="home.prepareRemoveCover(a)">

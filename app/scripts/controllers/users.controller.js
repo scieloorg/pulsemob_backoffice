@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('sbAdminApp')
-.controller('UsersCtrl', ['$scope', 'UserService', 'ProfileService', 'MagazineService', 'ngDialog', 'toaster', function($scope, UserService, ProfileService, MagazineService, ngDialog, toaster) {
+.controller('UsersCtrl', ['$scope', '$translate', 'UserService', 'ProfileService', 'MagazineService', 'ngDialog', 'toaster', function($scope, $translate, UserService, ProfileService, MagazineService, ngDialog, toaster) {
 	var vm = this;
 
 	vm.init = init;
 	vm.list = list;
+	vm.validate = validate;
 	vm.edit = edit;
 	vm.create = create;
 	vm.remove = remove;
@@ -17,11 +18,17 @@ angular.module('sbAdminApp')
 	vm.init();
 
 	function loadMagazines(query) {
-		return vm.magazines;
+		query = query.toLowerCase();
+
+		return vm.magazines.filter(function(value){
+			return value.magazine_name.toLowerCase().indexOf(query) != -1;
+		});
 	};
 
 	function prepareCreate() {
-		vm.user = {};
+		vm.user = {profile: 0};
+
+		$scope.forms = {};
 
 		vm.newDialog = ngDialog.open({
 			template: 'new-dialog',
@@ -29,16 +36,33 @@ angular.module('sbAdminApp')
 		});
 	}
 
+	function validate(user) {
+		if(!$scope.forms.form1.$valid) {
+			$scope.forms.form1.fullname.$dirty = true;
+			$scope.forms.form1.email.$dirty = true;
+
+			return false;
+		}
+
+		return true;
+	}
+
 	function create(user) {
-		/*UserService.save(user).$promise.then(function(response) {
-			vm.users.push(response.data);
+		if(!validate(user)) {
+			return;
+		}
+
+		UserService.save(user).$promise.then(function(response) {
+			vm.users.push(response);
 
 			toaster.pop('success', 'Usuário criado com sucesso.');
-		});*/
+		}, function(err) {
+			toaster.pop('error', $translate.instant(err.data));
+		});
 
-		vm.users.push(UserService.save(user)); //
+		/*vm.users.push(UserService.save(user)); //
 
-		toaster.pop('success', 'Usuário criado com sucesso.'); //
+		toaster.pop('success', 'Usuário criado com sucesso.'); //*/
 
 		vm.newDialog.close();
 	};
@@ -48,6 +72,8 @@ angular.module('sbAdminApp')
 		angular.copy(user, vm.user);
 		vm.user.original = user;
 
+		$scope.forms = {};
+
 		vm.editDialog = ngDialog.open({
 			template: 'edit-dialog',
 			scope: $scope
@@ -55,18 +81,24 @@ angular.module('sbAdminApp')
 	}
 
 	function edit(user) {
+		if(!validate(user)) {
+			return;
+		}
+
 		var index = vm.users.indexOf(user.original);
 		
 		if(index != -1) {
-			/*UserService.save(user).$promise.then(function(response) {
-				angular.copy(response.data, vm.users[index]);
+			UserService.save(user).$promise.then(function(response) {
+				angular.copy(response, vm.users[index]);
 
 				toaster.pop('success', 'Usuário editado com sucesso.');
-			});*/
+			}, function(err) {
+				toaster.pop('error', $translate.instant(err.data));
+			});
 
-			angular.copy(UserService.save(user), vm.users[index]); //
+			// angular.copy(UserService.save(user), vm.users[index]); //
 
-			toaster.pop('success', 'Usuário editado com sucesso.'); //
+			// toaster.pop('success', 'Usuário editado com sucesso.'); //
 		}
 
 		vm.editDialog.close();
@@ -84,7 +116,7 @@ angular.module('sbAdminApp')
 	}
 
 	function remove(user) {
-		/*UserService.delete({ param1: user.id }).$promise.then(function() {
+		UserService.delete({ param2: user.id }).$promise.then(function() {
 			var index = vm.users.indexOf(user);
 			
 			if(index != -1) {
@@ -92,15 +124,17 @@ angular.module('sbAdminApp')
 			}
 
 			toaster.pop('success', 'Usuário removido com sucesso.');
-		});*/
+		}, function(err) {
+			toaster.pop('error', $translate.instant(err.data));
+		});
 
-		var index = vm.users.indexOf(user); //
+		/*var index = vm.users.indexOf(user); //
 
 		if(index != -1) { //
 			vm.users.splice(index, 1); //
 		} //
 
-		toaster.pop('success', 'Usuário removido com sucesso.'); //
+		toaster.pop('success', 'Usuário removido com sucesso.'); //*/
 	}
 
 	function listProfiles() {
@@ -108,21 +142,21 @@ angular.module('sbAdminApp')
 	}
 
 	function listMagazines() {
-		/*MagazineService.list().$promise.then(function(response) {
+		MagazineService.list().$promise.then(function(response) {
 			vm.magazines = response;
-		});*/
+		});
 
-		vm.magazines = MagazineService.list(); //
+		// vm.magazines = MagazineService.list(); //
 	}
 
 	function list() {
-		/*UserService.list().$promise.then(function(response) {
+		UserService.list().$promise.then(function(response) {
 			vm.users = response;
-		});*/
+		});
 
-		vm.users = UserService.list(); //
+		/*vm.users = UserService.list(); //
 
-		vm.usersList = [].concat(vm.users);
+		vm.usersList = [].concat(vm.users);*/
 	}
 
 	function init() {

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sbAdminApp')
-.controller('HomeCtrl', ['$scope', '$timeout', 'ArticleService', 'angularGridInstance', 'ngDialog', 'toaster', function($scope, $timeout, ArticleService, angularGridInstance, ngDialog, toaster) {
+.controller('HomeCtrl', ['$rootScope', '$scope', '$timeout', '$translate', 'ArticleService', 'SolrService', 'angularGridInstance', 'ngDialog', 'toaster', function($rootScope, $scope, $timeout, $translate, ArticleService, SolrService, angularGridInstance, ngDialog, toaster) {
 	var vm = this;
 
 	vm.init = init;
@@ -11,6 +11,7 @@ angular.module('sbAdminApp')
 	vm.showCoverDetails = showCoverDetails;
 	vm.prepareRemoveCover = prepareRemoveCover;
 	vm.listLastsByFilter = listLastsByFilter;
+	vm.coverPath = coverPath;
 
 	init();
 
@@ -49,7 +50,7 @@ angular.module('sbAdminApp')
 	}
 
 	function removeCover(article) {
-		/*ArticleService.deleteCover({ param2: article.id }).$promise.then(function() {
+		ArticleService.deleteCover({ param2: article.id }).$promise.then(function() {
 			var index = vm.articles.indexOf(article);
 			
 			if(index != -1) {
@@ -57,15 +58,9 @@ angular.module('sbAdminApp')
 			}
 
 			toaster.pop('success', 'Capa do artigo removida com sucesso.');
-		});*/
-
-		var index = vm.articles.indexOf(article); //
-
-		if(index != -1) { //
-			vm.articles.splice(index, 1); //
-		} //
-
-		toaster.pop('success', 'Capa do artigo removida com sucesso.'); //
+		}, function(err) {
+			toaster.pop('error', $translate.instant(err.data));
+		});
 	}
 
 	function listLastsByFilter() {
@@ -73,19 +68,38 @@ angular.module('sbAdminApp')
 	}
 
 	function listLasts() {
-		/*ArticleService.listLasts().$promise.then(function(response) {
-			vm.articles = response.data;
-		});*/
+		var params_array = [];
 
-		vm.articles = ArticleService.listLasts(); //
+		var param_magazines = vm.user.profile != 0 ? vm.user.magazines.map(function(entry) { return entry.id; }).join(' OR ') : '*';
+		params_array.push('journal_id:(' + param_magazines + ')');
+
+		params_array.push('image_upload_date:[* TO *]');
+
+		var params = params_array.join(' AND ');
+
+		SolrService.listLasts({ 'param2': params}).$promise.then(function(response) {
+			vm.articles = response.response.docs;
+		}, function(err) { 
+			toaster.pop('error', 'Ocorreu um erro ao pesquisar artigos.');
+		});
 
 		vm.articlesList = [].concat(vm.articles);
 	}
 
-	function init() {
-		listLasts();
+	function coverPath(article_id) {
+		return ArticleService.coverPath(article_id);
+	}
 
-		vm.showAs = 'list';
+	function init() {
+		$rootScope.$watch('user', function (user) {
+			if (user){
+				vm.user = $rootScope.user;
+
+				listLasts();
+
+				vm.showAs = 'list';
+			}
+		});
 	}
 }]);
 

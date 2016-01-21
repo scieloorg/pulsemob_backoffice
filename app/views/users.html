@@ -39,7 +39,7 @@
 										<td>{{u.profile | profile}}</td>
 										<td>
 											<span ng-repeat="m in u.magazines | orderBy:'name'">
-												{{m.name}}<span ng-if="!$last">, </span>
+												{{m.magazine_name}}<span ng-if="!$last">, </span>
 											</span>
 										</td>
 										<td>
@@ -78,33 +78,31 @@
 <script type='text/ng-template' id='new-dialog'>
 	<h4>Novo Usuário</h4>
 
-	<form name='form' role='form'>
+	<form name='forms.form1' role='form'>
 		<p>
 			<div class='row'>
 				<div class='col-md-12'>
 					<div class='form-group'>
 						<label>Nome</label>
-						<input ng-model='user.user.name' maxlength='255' class='form-control'>
+						<input name='fullname' ng-model='user.user.name' maxlength='255' class='form-control' required>
 					</div>
 				</div>
 				<div class='col-md-12'>
 					<div class='form-group'>
 						<label>E-mail</label>
-						<input ng-model='user.user.email' maxlength='255' class='form-control'>
+						<input name='email' ng-model='user.user.email' maxlength='255' class='form-control' required>
 					</div>
 				</div>
 				<div class='col-md-12'>
 					<div class='form-group'>
 						<label>Perfil</label>
-						<select class='form-control'>
-							<option ng-repeat='profile in user.profiles' value='profile'>{{profile | profile}}</option>
-						</select>
+						<select name='profile' ng-disabled='$parent.$parent.user.profile == 1' class='form-control' ng-model='user.user.profile' ng-options='p as (p | profile) for p in user.profiles' ng-init='user.user.profile = $parent.$parent.user.profile == 1 ? 2 : 0' required />
 					</div>
 				</div>
 				<div class='col-md-12'>
 					<div class='form-group'>
 						<label>Revistas</label>
-						<tags-input ng-model='user.user.magazines' replace-spaces-with-dashes='false' display-property='name' placeholder='Adicione uma revista'>
+						<tags-input ng-model='user.user.magazines' replace-spaces-with-dashes='false' display-property='magazine_name' ng-value='id' placeholder='Adicione uma revista'>
 							<auto-complete source='user.loadMagazines($query)' min-length='1'></auto-complete>
 						</tags-input>
 					</div>
@@ -132,31 +130,31 @@
 <script type='text/ng-template' id='edit-dialog'>
 	<h4>Editar Usuário</h4>
 
-	<form name='form' role='form'>
+	<form name='forms.form1' role='form'>
 		<p>
 			<div class='row'>
 				<div class='col-md-12'>
 					<div class='form-group'>
 						<label>Nome</label>
-						<input ng-model='user.user.name' maxlength='255' class='form-control'>
+						<input name='fullname' ng-model='user.user.name' maxlength='255' class='form-control' required>
 					</div>
 				</div>
 				<div class='col-md-12'>
 					<div class='form-group'>
 						<label>E-mail</label>
-						<input ng-model='user.user.email' maxlength='255' class='form-control'>
+						<input name='email' ng-model='user.user.email' maxlength='255' class='form-control' required>
 					</div>
 				</div>
 				<div class='col-md-12'>
 					<div class='form-group'>
 						<label>Perfil</label>
-						<select class='form-control' ng-model='user.user.profile' ng-options='profile as (profile | profile) for profile in user.profiles'></select>
+						<select name='profile' ng-disabled='$parent.$parent.user.profile == 1' class='form-control' ng-model='user.user.profile' ng-options='p as (p | profile) for p in user.profiles' required />
 					</div>
 				</div>
 				<div class='col-md-12'>
 					<div class='form-group'>
 						<label>Revistas</label>
-						<tags-input ng-model='user.user.magazines' replace-spaces-with-dashes='false' display-property='name' placeholder='Adicione uma revista'>
+						<tags-input ng-model='user.user.magazines' replace-spaces-with-dashes='false' display-property='magazine_name' placeholder='Adicione uma revista'>
 							<auto-complete source='user.loadMagazines($query)' min-length='1'></auto-complete>
 						</tags-input>
 					</div>

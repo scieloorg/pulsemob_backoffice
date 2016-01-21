@@ -1,27 +1,21 @@
 'use strict';
 
 angular.module('sbAdminApp')
-.service('CategoryService', ['$resource', function($resource) {
-	/*return $resource($rootScope.app.WS + '/profile.svc/:param1:param2', {
+.service('CategoryService', ['$resource', '$rootScope', function($resource, $rootScope) {
+	return $resource($rootScope.app.WS + '/categories/:param1:param2', {
 		param1 : "@param1",
 		param2 : "@param2",
 	}, {
-		'listLasts': {
-			method: 'GET'
+		'list': {
+			method: 'GET',
+			isArray: true,
 			params: {
-				param1: "lasts"
-			}
-		},
-		'deleteCover': {
-			method: 'DELETE'
-			params: {
-				param1: "cover"
+				param1: 'list'
 			}
 		}
+	});
 
-	});*/
-
-	var list = [
+	/*var list = [
 		{	id: 1,	name: 'Agricultural Sciences'	},
 		{ 	id: 2,	name: 'Applied Social Sciences' },
 		{ 	id: 3, 	name: 'Biological Sciences' },
@@ -34,5 +28,5 @@ angular.module('sbAdminApp')
 
 	this.list = function() {
 		return angular.copy(list);
-	}
+	}*/
 }]);

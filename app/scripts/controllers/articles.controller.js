@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sbAdminApp')
-.controller('ArticlesCtrl', ['$scope', 'ArticleService', 'MagazineService', 'CategoryService', 'ngDialog', 'toaster', function($scope, ArticleService, MagazineService, CategoryService, ngDialog, toaster) {
+.controller('ArticlesCtrl', ['$scope', '$rootScope', '$filter', 'ArticleService', 'CategoryService', 'MagazineService', 'SolrService', 'ngDialog', 'Upload', 'toaster', function($scope, $rootScope, $filter, ArticleService, CategoryService, MagazineService, SolrService, ngDialog, Upload, toaster) {
 	var vm = this;
 
 	vm.init = init;
@@ -13,37 +13,27 @@ angular.module('sbAdminApp')
 	vm.showEditCover = showEditCover;
 	vm.prepareRemove = prepareRemove;
 	vm.toggleAdvancedSearch = toggleAdvancedSearch;
+	vm.coverPath = coverPath;
 
 	vm.init();
-
-	///
-	$scope.myImage='';
-	$scope.myCroppedImage='';
-
-	var handleFileSelect=function(evt) {
-		var file=evt.currentTarget.files[0];
-		var reader = new FileReader();
-		reader.onload = function (evt) {
-			$scope.$apply(function($scope){
-				console.log(evt.target.result);
-				$scope.myImage=evt.target.result;
-			});
-		};
-		reader.readAsDataURL(file);
-	};
-	angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
-	///
-
+	
 	function selectRow(article) {
 		article.selected = !article.selected;
+
+		if (!article.selected) {
+			var index = vm.selectedArticles.indexOf(article);
+			if (index > -1) {
+				vm.selectedArticles.splice(index, 1);
+			}
+		} else {
+			vm.selectedArticles.push(article);
+		}
 
 		vm.hasSelectedRow = false;
 
 		angular.forEach(vm.articles, function(article, key) {
 			vm.hasSelectedRow = vm.hasSelectedRow || article.selected;
 		});
-
-		console.log(vm.hasSelectedRow);
 	}
 
 	function toggleAdvancedSearch() {
@@ -66,15 +56,15 @@ angular.module('sbAdminApp')
 	}
 
 	function remove(article) {
-		/*ArticleService.deleteCover().$promise.then(function() {
-			article.cover = 'http://dummyimage.com/400x300/F44336/fff.png&text=x';
+		ArticleService.deleteCover({ 'param2': article.id }).$promise.then(function() {
+			article.image_upload_date = undefined;
+			article.image_upload_path = undefined;
+			article.image_uploader = undefined;
 
 			toaster.pop('success', 'Capa do artigo removida com sucesso.');
-		});*/
-
-		article.cover = 'http://dummyimage.com/360x480/F44336/fff.png&text=x'; //
-
-		toaster.pop('success', 'Capa do artigo removida com sucesso.'); //
+		}, function(err) {
+			toaster.pop('error', $filter('translate')(err.data));
+		});
 	}
 
 	function showDetails(article) {
@@ -86,8 +76,8 @@ angular.module('sbAdminApp')
 		});
 	}
 
-	function showEditCover(article) {
-		vm.currentArticle = article;
+	function showEditCover(articles) {
+		vm.currentArticles = articles;
 
 		vm.editDialog = ngDialog.open({
 			template: 'edit-dialog',
@@ -96,44 +86,76 @@ angular.module('sbAdminApp')
 		});
 	}
 
-	function save(article) {
-		vm.editDialog.close();
+	function save(articles, file) {
+		articles.forEach(function (article) {
+			var index = vm.articles.indexOf(article);
+		
+			if(index != -1) {
+				ArticleService.uploadCover(file, article.id).then(function(response) {
+					article.image_upload_date = response.data.upload_time;
+					article.image_upload_path = response.data.image;
+					article.image_uploader = response.data.administrator.name;
 
-		toaster.pop('success', 'Capa do artigo salva com sucesso.'); //
+					vm.editDialog.close();
+
+					toaster.pop('success', 'Capa do artigo salva com sucesso.');
+				}, function(err) {
+					toaster.pop('error', $filter('translate')(err.data));
+				});
+			}
+		});		
 	}
 
 	function listMagazines() {
-		/*MagazineService.list().$promise.then(function(response) {
+		MagazineService.list().$promise.then(function(response) {
 			vm.magazines = response;
-		});*/
+		});
 
-		vm.magazines = MagazineService.list(); //
+		return vm.magazines;
 	}
 
 	function listCategories() {
-		/*CategoryService.list().$promise.then(function(response) {
+		CategoryService.list().$promise.then(function(response) {
 			vm.categories = response;
-		});*/
-
-		vm.categories = CategoryService.list(); //
+		});
 	}
 
 	function list(filter) {
-		/*ArticleService.list().$promise.then(function(response) {
-			vm.articles = response;
-		});*/
+		var parameters = [];
 
-		vm.articles = ArticleService.list(); //
+		if (filter.value) parameters.push(filter.value);
+		if (filter.category) parameters.push('subject_areas_ids:' + filter.category);
+		if (filter.cover_option != 2) parameters.push((filter.cover_option == 0 ? '-' : '') + 'image_upload_date:[* TO *]');
+
+		var param_magazines = filter.magazine ?  filter.magazine.id : vm.user.profile != 0 ? vm.user.magazines.map(function(entry) { return entry.id; }).join(' OR ') : '*';
+		parameters.push('journal_id:(' + param_magazines + ')');
+
+		var parameters_string = parameters.join(' AND ');
+
+		SolrService.list({ 'param2': parameters_string }).$promise.then(function(response) {
+			vm.articles = response.response.docs;
+		});
 
 		vm.articlesList = [].concat(vm.articles);
 	}
 
-	function init() {
-		vm.filter = {};
-		vm.example = 'http://localhost:9000/img/exemplo.jpg';
+	function coverPath(article) {
+		if (article.id !== undefined) {
+			return $rootScope.app.WS + '/articles/get-cover/' + article.id + '?cb=' + article.image_upload_date;
+		}
+	}
 
-		//list();
-		listMagazines();
-		listCategories();
+	function init() {
+		$rootScope.$watch('user', function (user) {
+			if (user){
+				vm.user = $rootScope.user;
+
+				vm.articles = [];
+				vm.selectedArticles = [];
+
+				listMagazines();
+				listCategories();
+			}
+		});
 	}
 }]);

@@ -23,7 +23,7 @@
 				<a ui-sref='dashboard.articles'><i class='fa fa-book fa-fw'></i> Artigos</a>
 			</li>
 			<li ui-sref-active='active'>
-				<a ui-sref='dashboard.users'><i class='fa fa-user fa-fw'></i> Usuários</a>
+				<a ng-show='$parent.user.profile === 0 || $parent.user.profile === 1' ui-sref='dashboard.users'><i class='fa fa-user fa-fw'></i> Usuários</a>
 			</li>
 		</ul>
 	</div>

@@ -37,22 +37,22 @@
 						<div class='col-md-4'>
 							<div class='form-group'>
 								<label>Categoria</label>
-								<select class='form-control' ng-model='article.filter.category' ng-options='category.id as category.name for category in article.categories' />
+								<select class='form-control' ng-model='article.filter.category' ng-options='category.id as category.category_name_pt for category in article.categories' />
 							</div>
 						</div>
 						<div class='col-md-4'>
 							<div class='form-group'>
 								<label>Revista</label>
-								<input type='text' ng-model='article.filter.magazine' typeahead='magazine.name for magazine in article.magazines | filter:$viewValue | limitTo:8' class='form-control'>
+								<input type='text' ng-model='article.filter.magazine' typeahead='magazine as magazine.magazine_name for magazine in article.magazines | filter:$viewValue | limitTo:8' typeahead-show-hint='true' class='form-control'>
 							</div>
 						</div>
 						<div class='col-md-2'>
 							<div class='form-group'>
 								<label>Exibir</label>
-								<select class='form-control'>
-									<option>Todos</option>
-									<option>Com capa</option>
-									<option>Sem capa</option>
+								<select class='form-control' ng-model='article.filter.cover_option' ng-init="article.filter.cover_option='2'">
+									<option value='2'>Todos</option>
+									<option value='1'>Com capa</option>
+									<option value='0'>Sem capa</option>
 								</select>
 							</div>
 						</div>
@@ -74,7 +74,7 @@
 											<button class='btn btn-default pull-right' type='submit' ng-click='article.articles = null' style='margin-left: 5px;'>
 												<i class='fa fa-minus'></i><span class='hidden-xs'> Limpar resultados
 											</button>
-											<button class='btn btn-default pull-right' type='submit' ng-click='article.showEditCover()' ng-show='article.hasSelectedRow'>
+											<button class='btn btn-default pull-right' type='submit' ng-click='article.showEditCover(article.selectedArticles)' ng-show='article.selectedArticles.length > 0'>
 												<i class='fa fa-pencil'></i><span class='hidden-xs'> Editar selecionados
 											</button>
 										</th>
@@ -97,12 +97,12 @@
 									<tr ng-repeat='a in article.articlesList' ng-click='article.selectRow(a)' ng-class='{ "selected": a.selected }'>
 										<td>
 											<a href ng-click='article.showDetails(a)'>
-												<img class='cover-list' ng-src='{{a.cover}}'>
+												<img ng-if='a.image_upload_date' class='cover-list' ng-src='{{article.coverPath(a)}}'>
 											</a>
 										</td>
 										<td>
-											<h4>{{a.article}}</h4>
-											<h5>{{a.magazine}}</h5>
+											<h4>{{a.original_title}}</h4>
+											<h5>{{a.journal_title}}</h5>
 											<p>
 												<span>
 													<span ng-repeat="a in a.authors">{{a}}<span ng-if="!$last">, </span></span>
@@ -110,18 +110,18 @@
 											</p>
 										</td>
 										<td>
-											<p>Ano: {{a.editionYear}}</p>
-											<p>Volume: {{a.editionVolume}}</p>
-											<p>Número: {{a.editionNumber}}</p>
+											<p>Ano: {{a.publication_date | date:'yyyy'}}</p>
+											<p>Volume: {{a.journal_volume}}</p>
+											<p>Número: {{a.journal_number}}</p>
 										</td>
-										<td>{{a.uploadDate}}</td>
+										<td>{{a.image_upload_date | date: 'dd/MM/yyyy @ HH:mm'}}</td>
 										<td>
-											<button class='btn btn-default pull-right' ng-click='article.showEditCover(a)'>
+											<button class='btn btn-default pull-right' ng-click='article.showEditCover([a])'>
 												<i class='fa fa-pencil'></i><span class='hidden-xs'> Editar</span>
 											</button>
 										</td>
 										<td>
-											<button class='btn btn-default pull-right' ng-click='article.prepareRemove(a)'>
+											<button ng-disabled='a.image_upload_date == undefined'class='btn btn-default pull-right' ng-click='article.prepareRemove(a)'>
 												<i class='fa fa-close'></i><span class='hidden-xs'> Remover</span>
 											</button>
 										</td>
@@ -152,7 +152,7 @@
 	<br />
 
 	<div class='text-center'>
-		<img ng-src='{{article.currentArticle.cover}}' />
+		<img ng-src='{{article.coverPath(article.currentArticle)}}' style='max-width: 100%; max-height: 100%;'/>
 	</div>
 
 	<div class='row'>
@@ -165,9 +165,9 @@
 				</span>
 			</p>
 			<p>
-				Ano {{article.currentArticle.editionYear}} - Volume {{article.currentArticle.editionVolume}} - Número {{article.currentArticle.editionNumber}}
+				Ano {{article.currentArticle.publication_date | date:'yyyy'}} - Volume {{article.currentArticle.journal_volume}} - Número {{article.currentArticle.journal_number}}
 			</p>
-			<small>Imagem carregada por <b>Usuário 1</b> no dia <b>{{article.currentArticle.uploadDate}}</b>.</small>
+			<small>Imagem carregada por <b>{{article.currentArticle.image_uploader}}</b> em <b>{{article.currentArticle.image_upload_date | date: 'dd/MM/yyyy @ HH:mm'}}</b>.</small>
 		</div>
 	</div>
 </script>
@@ -176,34 +176,34 @@
 	<br />
 
 	<div class='row'>
-		<div class='col-md-6'>
-			<h5 class='text-center'>Imagem carregada</h5>
-			<div class='cropArea'>
-				<img-crop image='article.example' result-image='myCroppedImage' area-type='square'></img-crop>
-			</div>
-		</div>
-		<div class='col-md-6'>
-			<h5 class='text-center'>Visualização da capa</h5>
-			<div class='pull-left'>
-				<img ng-src='{{myCroppedImage}}' style='width: 360px; height: 480px;' />
-			</div>
-		</div>
-	</div>
+	    <form name='myForm'>
+	        <div class='col-md-6'>
+		        <div ngf-drop ng-model='article.picFile' ng-init="article.picFile=''" ngf-pattern='image/*' class='cropArea'>
+		            <img-crop image='article.picFile  | ngfDataUrl' area-type='square' result-image='article.croppedDataUrl' result-image-size='800' ng-init="article.croppedDataUrl=''"></img-crop>
+		        </div>
+	        </div>
 
+	        <div class='col-md-6'>
+		        <img width='100%' ng-src='{{article.croppedDataUrl}}' />
+	        </div>
+	            
+	        <span class='progress' ng-show='progress >= 0'>
+				<div style='width:{{progress}}%' ng-bind="progress + '%'"></div>
+	        </span>
+	        <span ng-show='result'>Upload Successful</span>
+	        <span class='err' ng-show='errorMsg'>{{errorMsg}}</span>
+	    </form>
+	</div>
+	
 	<br />
 
 	<div class='row'>
 		<div class='col-md-12'>
-			<div class='box-placeholder'>
-				<h5>Arraste uma nova capa aqui</h5>
+			<button class='btn btn-info' ngf-select ng-model='article.picFile' accept='image/*'> Selecionar imagem</button>
+			<div class='pull-right'>
+				<button class='btn btn-primary' ng-click='article.save(article.currentArticles, article.croppedDataUrl)'>Salvar</button>
+				<button class='btn btn-default' ng-click='closeThisDialog()'>Fechar</button>
 			</div>
-		</div>
-	</div>
-
-	<div class='row'>
-		<div class='col-md-12'>
-			<button class='btn btn-primary' ng-click='article.save(article.currentArticle)'>Salvar</button>
-			<button class='btn btn-default' ng-click='closeThisDialog()'>Fechar</button>
 		</div>
 	</div>
 
@@ -252,5 +252,28 @@
 <style>
 	tr.selected {
 		background-color: #d9edf7 !important;
+	}
+
+	.cropArea {
+	    background: #E4E4E4;
+	    overflow: hidden;
+	    width:600px;
+	    height:420px;
+	}
+
+	form .progress {
+	    line-height: 15px;
+	}
+
+	.progress {
+	    display: inline-block;
+	    width: 100px;
+	    border: 3px groove #CCC;
+	}
+
+	.progress div {
+	    font-size: smaller;
+	    background: orange;
+	    width: 0;
 	}
 </style>

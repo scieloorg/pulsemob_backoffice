@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('sbAdminApp')
-.service('UserService', ['$resource', function($resource) {
-	/*return $resource($rootScope.app.WS + '/profile.svc/:param1:param2', {
+.service('UserService', ['$resource', '$rootScope', function($resource, $rootScope) {
+	return $resource($rootScope.app.WS + '/users/:param1/:param2', {
 		param1 : "@param1",
 		param2 : "@param2",
 	}, {
@@ -13,22 +13,54 @@ angular.module('sbAdminApp')
 			}
 		},
 		'list': {
-			method: 'GET'
+			method: 'GET',
+			isArray: true,
+			params: {
+				param1: 'list'
+			}
 		},
 		'save': {
-			method: 'POST'
+			method: 'POST',
+			params: {
+				param1: 'save'
+			}
 		},
 		'delete': {
-			method: 'DELETE'
-		},
-		'recoverPassword': {
+			method: 'DELETE',
+			params: {
+				param1: 'delete'
+			}
+		},'recoverPassword': {
 			method: 'POST',
 			params: {
 				param1: "recover-password"
 			}
+		},
+		'changePassword': {
+			method: 'POST',
+			params: {
+				param1: "change-password"
+			}
+		},
+		'setPassword': {
+			method: 'POST',
+			params: {
+				param1: "set-password"
+			}
+		},
+		'login': {
+			method: 'POST',
+			params: {
+				param1: "login"
+			}
+		},
+		'validate': {
+			method: 'POST',
+			params: {
+				param1: "validate-recovery-token"
+			}
 		}
-
-	});*/
+	});
 
 	this.list = function() {
 		return [
