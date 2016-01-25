@@ -149,6 +149,10 @@
 		controller: 'ArticlesCtrl',
 		controllerAs: 'article',
 		url:'/articles',
+		title: 'Artigos',
+		params: {
+			value: ''
+		},
 		resolve: {
 			authenticated: ['$q', '$location', '$auth', function($q, $location, $auth) {
 				checkAuthenticated($q, $location, $auth);
@@ -237,8 +241,9 @@
 }])
 .run(['$rootScope', '$window', '$http', '$q', '$auth', '$location', function($rootScope, $window, $http, $q, $auth, $location){
  	$rootScope.app = {
-		"WS": "http://infobase.cloudns.org:8001/webservices/backoffice",
-		"SOLR_URL": "http://infobase.cloudns.org:8001"
+		"WS": "",
+		"BASE_URL": "",
+		"SOLR_URL": ""
 	};
 
 	$rootScope.$storage = $window.localStorage;

@@ -61,7 +61,7 @@
 									<tr ng-repeat="a in home.articlesList">
 										<td>
 											<a href ng-click='home.showCoverDetails(a)'>
-												<img class="cover-list" ng-src="{{home.coverPath(a.id)}}">
+												<img class="cover-list" ng-src="{{home.coverPath(a)}}">
 											</a>
 										</td>
 										<td>
@@ -93,7 +93,7 @@
 								</tbody>
 								<tfoot>
 									<tr>
-										<td colspan="4" class="text-center">
+										<td colspan="5" class="text-center">
 											<div st-pagination="" st-items-by-page="10" st-displayed-pages="7"></div>
 										</td>
 									</tr>
@@ -110,11 +110,11 @@
 								<li data-ng-repeat="a in home.articles" class="grid">
 									<div class='text-center' style="padding: 5px;">
 										<a href ng-click='home.showCoverDetails(a)'>
-											<img ng-src="{{home.coverPath(a.id)}}" class="grid-img"  />
+											<img ng-src="{{home.coverPath(a)}}" class="grid-img"  />
 										</a>
 
-										<h3>{{a.article}}</h3>
-										<h4>{{a.magazine}}</h4>
+										<h3>{{a.original_title}}</h3>
+										<h4>{{a.journal_title}}</h4>
 										<p>
 											<span>
 												<span ng-repeat="au in a.authors">{{au}}<span ng-if="!$last">, </span></span>
@@ -147,22 +147,22 @@
 	<br />
 
 	<div class='text-center'>
-		<img ng-src="{{home.currentArticle.cover}}" />
+		<img ng-src="{{home.coverPath(home.currentArticle)}}" style='max-width: 100%; max-height: 100%;' />
 	</div>
 
 	<div class='row'>
 		<div class='col-md-12 text-center'>
-			<h3>{{home.currentArticle.article}}</h3>
-			<h4>{{home.currentArticle.magazine}}</h4>
+			<h3>{{home.currentArticle.original_title}}</h3>
+			<h4>{{home.currentArticle.journal_title}}</h4>
 			<p>
 				<span>
 					<span ng-repeat="a in home.currentArticle.authors">{{a}}<span ng-if="!$last">, </span></span>
 				</span>
 			</p>
 			<p>
-				Ano {{home.currentArticle.editionYear}} - Volume {{home.currentArticle.editionVolume}} - Número {{home.currentArticle.editionNumber}}
+				Ano {{home.currentArticle.publication_date | date:'yyyy'}} - Volume {{home.currentArticle.journal_volume}} - Número {{home.currentArticle.journal_number}}
 			</p>
-			<small>Imagem carregada por <b>Usuário 1</b> no dia <b>{{home.currentArticle.uploadDate}}</b>.</small>
+			<small>Imagem carregada por <b>{{home.currentArticle.image_uploader}}</b> no dia <b>{{home.currentArticle.image_upload_date | date: 'dd/MM/yyyy @ HH:mm'}}</b>.</small>
 		</div>
 	</div>
 </script>

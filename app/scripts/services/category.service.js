@@ -14,19 +14,4 @@ angular.module('sbAdminApp')
 			}
 		}
 	});
-
-	/*var list = [
-		{	id: 1,	name: 'Agricultural Sciences'	},
-		{ 	id: 2,	name: 'Applied Social Sciences' },
-		{ 	id: 3, 	name: 'Biological Sciences' },
-		{	id: 4,	name: 'Engineering' },
-		{ 	id: 5,	name: 'Exact and Earth Sciences' },
-		{ 	id: 6, 	name: 'Health Sciences' },
-		{	id: 7,	name: 'Human Sciences' },
-		{ 	id: 8,	name: 'Literature and Arts' }
-		];
-
-	this.list = function() {
-		return angular.copy(list);
-	}*/
 }]);

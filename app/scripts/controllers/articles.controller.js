@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sbAdminApp')
-.controller('ArticlesCtrl', ['$scope', '$rootScope', '$filter', 'ArticleService', 'CategoryService', 'MagazineService', 'SolrService', 'ngDialog', 'Upload', 'toaster', function($scope, $rootScope, $filter, ArticleService, CategoryService, MagazineService, SolrService, ngDialog, Upload, toaster) {
+.controller('ArticlesCtrl', ['$scope', '$rootScope', '$stateParams', '$filter', 'ArticleService', 'CategoryService', 'MagazineService', 'SolrService', 'ngDialog', 'Upload', 'toaster', function($scope, $rootScope, $stateParams, $filter, ArticleService, CategoryService, MagazineService, SolrService, ngDialog, Upload, toaster) {
 	var vm = this;
 
 	vm.init = init;
@@ -86,12 +86,17 @@ angular.module('sbAdminApp')
 		});
 	}
 
-	function save(articles, file) {
+	function save(articles, croppedImg, picFile) {
+		if (!picFile) {
+			toaster.pop('warning', 'Selecione uma imagem.');
+			return;
+		}
+
 		articles.forEach(function (article) {
 			var index = vm.articles.indexOf(article);
 		
 			if(index != -1) {
-				ArticleService.uploadCover(file, article.id).then(function(response) {
+				ArticleService.uploadCover(croppedImg, article.id).then(function(response) {
 					article.image_upload_date = response.data.upload_time;
 					article.image_upload_path = response.data.image;
 					article.image_uploader = response.data.administrator.name;
@@ -141,18 +146,20 @@ angular.module('sbAdminApp')
 
 	function coverPath(article) {
 		if (article.id !== undefined) {
-			return $rootScope.app.WS + '/articles/get-cover/' + article.id + '?cb=' + article.image_upload_date;
+			return $rootScope.app.BASE_URL + '/' + article.image_upload_path;
 		}
 	}
 
 	function init() {
 		$rootScope.$watch('user', function (user) {
 			if (user){
+				vm.filter.value = $stateParams.value ?  $stateParams.value : undefined;
 				vm.user = $rootScope.user;
 
 				vm.articles = [];
 				vm.selectedArticles = [];
 
+				list(vm.filter);
 				listMagazines();
 				listCategories();
 			}

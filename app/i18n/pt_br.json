@@ -9,6 +9,7 @@
 	"UNEXPECTED_ERROR": "Erro inesperado.",
 	"SOLR_COMMUNICATION_FAILURE": "Falha de comunicação com a base de artigos.",
 	"TOKEN_MISSING": "TOKEN_MISSING",
+	"NOT_ALLOWED_FOR_PROFILE": "Seu perfil não permite que você efetue essa operação.",
 	"0": "O servidor está temporariamente indisponível.",
 
 	"": ""

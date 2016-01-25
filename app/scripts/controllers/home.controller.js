@@ -64,7 +64,7 @@ angular.module('sbAdminApp')
 	}
 
 	function listLastsByFilter() {
-		return listLasts(); //
+		return listLasts();
 	}
 
 	function listLasts() {
@@ -86,8 +86,10 @@ angular.module('sbAdminApp')
 		vm.articlesList = [].concat(vm.articles);
 	}
 
-	function coverPath(article_id) {
-		return ArticleService.coverPath(article_id);
+	function coverPath(article) {
+		if (article.id !== undefined) {
+			return $rootScope.app.BASE_URL + '/' + article.image_upload_path;
+		}
 	}
 
 	function init() {
@@ -102,5 +104,3 @@ angular.module('sbAdminApp')
 		});
 	}
 }]);
-
-//http://www.scielo.br/img/revistas/brag/glogo.gif

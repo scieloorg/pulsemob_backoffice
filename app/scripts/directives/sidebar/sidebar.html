@@ -7,9 +7,9 @@
 			<li class='sidebar-search'>
 				<form>
 					<div class='input-group custom-search-form'>
-						<input type='text' class='form-control' placeholder='Pesquisar artigos'>
+						<input type='text' class='form-control' ng-model="value" placeholder='Pesquisar artigos'>
 						<span class='input-group-btn'>
-							<button class='btn btn-default' ui-sref='dashboard.articles'>
+							<button class='btn btn-default' ui-sref='dashboard.articles({value: value})'>
 								<i class='fa fa-search'></i>
 							</button>
 						</span>

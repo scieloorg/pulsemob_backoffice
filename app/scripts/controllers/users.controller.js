@@ -60,10 +60,6 @@ angular.module('sbAdminApp')
 			toaster.pop('error', $translate.instant(err.data));
 		});
 
-		/*vm.users.push(UserService.save(user)); //
-
-		toaster.pop('success', 'Usuário criado com sucesso.'); //*/
-
 		vm.newDialog.close();
 	};
 
@@ -95,10 +91,6 @@ angular.module('sbAdminApp')
 			}, function(err) {
 				toaster.pop('error', $translate.instant(err.data));
 			});
-
-			// angular.copy(UserService.save(user), vm.users[index]); //
-
-			// toaster.pop('success', 'Usuário editado com sucesso.'); //
 		}
 
 		vm.editDialog.close();
@@ -127,14 +119,6 @@ angular.module('sbAdminApp')
 		}, function(err) {
 			toaster.pop('error', $translate.instant(err.data));
 		});
-
-		/*var index = vm.users.indexOf(user); //
-
-		if(index != -1) { //
-			vm.users.splice(index, 1); //
-		} //
-
-		toaster.pop('success', 'Usuário removido com sucesso.'); //*/
 	}
 
 	function listProfiles() {
@@ -145,18 +129,12 @@ angular.module('sbAdminApp')
 		MagazineService.list().$promise.then(function(response) {
 			vm.magazines = response;
 		});
-
-		// vm.magazines = MagazineService.list(); //
 	}
 
 	function list() {
 		UserService.list().$promise.then(function(response) {
 			vm.users = response;
 		});
-
-		/*vm.users = UserService.list(); //
-
-		vm.usersList = [].concat(vm.users);*/
 	}
 
 	function init() {
