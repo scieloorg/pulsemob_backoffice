@@ -12,7 +12,7 @@ angular.module('sbAdminApp')
 		'list': {
 			method: 'GET',
 			params: {
-				param1: 'search'
+				param1: 'backoffice_search'
 			}
 		},
 		'deleteCover': {
@@ -24,7 +24,7 @@ angular.module('sbAdminApp')
 		'listLasts': {
 			method: 'GET',
 			params: {
-				param1: 'search',
+				param1: 'backoffice_search',
 				param2: 'image_upload_date:[* TO *]',
 				sortParam: '&sort=',
 				sort: 'image_upload_date desc',

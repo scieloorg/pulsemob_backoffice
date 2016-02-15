@@ -37,7 +37,7 @@ angular.module('sbAdminApp')
 		
 			$timeout(redirectToLogin, 2000);
 		}, function(err) {
-			toaster.pop('error', $translate.instant(err.data));
+			toaster.pop('error', $translate.instant(err.data ? err.data : err.status));
 		});
 	}
 
@@ -48,7 +48,7 @@ angular.module('sbAdminApp')
 
 				vm.user = response;
 			}, function(err) {
-				toaster.pop('error', $translate.instant(err.data));
+				toaster.pop('error', $translate.instant(err.data ? err.data : err.status));
 
 				$timeout(redirectToLogin, 2000);
 			});	
@@ -66,6 +66,7 @@ angular.module('sbAdminApp')
 
 	function init() {
 		vm.token = $location.search().token;
+		vm.accept = $location.search().recovery || false;
 		vm.valid = false;
 
 		validateToken();

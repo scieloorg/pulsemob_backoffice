@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sbAdminApp')
-.controller('LoginCtrl', ['UserService', '$auth', '$rootScope', '$scope', '$state', '$filter', 'toaster', function(UserService, $auth, $rootScope, $scope, $state, $filter, toaster) {
+.controller('LoginCtrl', ['UserService', '$auth', '$rootScope', '$scope', '$state', '$translate', 'toaster', function(UserService, $auth, $rootScope, $scope, $state, $translate, toaster) {
 	var vm = this;
 
 	vm.init = init;
@@ -29,7 +29,7 @@ angular.module('sbAdminApp')
 		UserService.login(vm.user).$promise.then(function(response) {
 			handleLoginResponse(response);
 		}, function(err) {
-			toaster.pop('error', $filter('translate')(err.data ? err.data : err.status));
+			toaster.pop('error', $translate.instant(err.data ? err.data : err.status));
 		});
 	}
 

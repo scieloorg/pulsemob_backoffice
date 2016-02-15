@@ -57,7 +57,7 @@ angular.module('sbAdminApp')
 
 			toaster.pop('success', 'Usuário criado com sucesso.');
 		}, function(err) {
-			toaster.pop('error', $translate.instant(err.data));
+			toaster.pop('error', $translate.instant(err.data ? err.data : err.status));
 		});
 
 		vm.newDialog.close();
@@ -89,7 +89,7 @@ angular.module('sbAdminApp')
 
 				toaster.pop('success', 'Usuário editado com sucesso.');
 			}, function(err) {
-				toaster.pop('error', $translate.instant(err.data));
+				toaster.pop('error', $translate.instant(err.data ? err.data : err.status));
 			});
 		}
 
@@ -117,7 +117,7 @@ angular.module('sbAdminApp')
 
 			toaster.pop('success', 'Usuário removido com sucesso.');
 		}, function(err) {
-			toaster.pop('error', $translate.instant(err.data));
+			toaster.pop('error', $translate.instant(err.data ? err.data : err.status));
 		});
 	}
 

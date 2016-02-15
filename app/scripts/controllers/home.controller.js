@@ -9,6 +9,8 @@ angular.module('sbAdminApp')
 	vm.removeCover = removeCover;
 	vm.showAsTable = showAsTable;
 	vm.showCoverDetails = showCoverDetails;
+	vm.showEditCover = showEditCover;
+	vm.save = save;
 	vm.prepareRemoveCover = prepareRemoveCover;
 	vm.listLastsByFilter = listLastsByFilter;
 	vm.coverPath = coverPath;
@@ -59,8 +61,43 @@ angular.module('sbAdminApp')
 
 			toaster.pop('success', 'Capa do artigo removida com sucesso.');
 		}, function(err) {
-			toaster.pop('error', $translate.instant(err.data));
+			toaster.pop('error', $translate.instant(err.data ? err.data : err.status));
 		});
+	}
+
+	function showEditCover(articles) {
+		vm.currentArticles = articles;
+
+		vm.editDialog = ngDialog.open({
+			template: 'edit-dialog',
+			className: 'ngdialog-theme-default cover-dialog',
+			scope: $scope
+		});
+	}
+
+	function save(articles, croppedImg, picFile) {
+		if (!picFile) {
+			toaster.pop('warning', 'Selecione uma imagem.');
+			return;
+		}
+
+		articles.forEach(function (article) {
+			var index = vm.articles.indexOf(article);
+		
+			if(index != -1) {
+				ArticleService.uploadCover(croppedImg, article.id).then(function(response) {
+					article.image_upload_date = response.data.upload_time;
+					article.image_upload_path = response.data.image;
+					article.image_uploader = response.data.administrator.name;
+
+					vm.editDialog.close();
+
+					toaster.pop('success', 'Capa do artigo salva com sucesso.');
+				}, function(err) {
+					toaster.pop('error', $translate.instant(err.data ? err.data : err.status));
+				});
+			}
+		});		
 	}
 
 	function listLastsByFilter() {

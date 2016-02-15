@@ -6,6 +6,7 @@ angular.module('sbAdminApp')
 
 	vm.changePassword = changePassword;
 	vm.prepareChangePassword = prepareChangePassword;
+	vm.showPolicy = showPolicy;
 	vm.logout = logout;
 	vm.init = init;
 
@@ -17,6 +18,14 @@ angular.module('sbAdminApp')
 
 		vm.changePasswordDialog = ngDialog.open({
 			template: 'change-password-dialog',
+			scope: $scope
+		});
+	}
+
+	function showPolicy() {
+		vm.showPolicyDialog = ngDialog.open({
+			template: 'policyDialog',
+			showClose: false,
 			scope: $scope
 		});
 	}
@@ -38,7 +47,7 @@ angular.module('sbAdminApp')
 				vm.changePasswordDialog.close();
 				toaster.pop('success', 'Senha alterada com sucesso.');
 			}, function(err) {
-				toaster.pop('error', $translate.instant(err.data));
+				toaster.pop('error', $translate.instant(err.data ? err.data : err.status));
 			});
 		}
 	}

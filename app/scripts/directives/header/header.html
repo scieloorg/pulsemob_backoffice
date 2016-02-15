@@ -22,10 +22,13 @@
 						<a href ng-click='header.prepareChangePassword()'>
 							<i class="fa fa-key fa-fw"></i> Alterar Senha
 						</a>
+						<a href ng-click='header.showPolicy()'>
+							<i class='fa fa-edit fa-fw'></i> Políticas de Uso
+						</a>
 					</li>
 					<li class="divider"></li>
 					<li>
-						<a ng-click='header.logout()	'><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+						<a ng-click='header.logout()'><i class="fa fa-sign-out fa-fw"></i> Sair</a>
 					</li>
 				</ul>
 			</li>
@@ -65,5 +68,22 @@
 			<button type='submit' class='btn btn-primary'>Salvar</button>
 			<button class='btn btn-default' ng-click='closeThisDialog()'>Fechar</button>
 		</form>
+	</script>
+
+	<script type="text/ng-template" id='policyDialog'>
+		<div class='row'>
+			<div class='col-sm-12'>
+				<h1>Termo de Compromisso</h1>
+				<br>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut mattis vehicula nisl hendrerit luctus. Donec commodo placerat ex. Donec tempus lobortis nulla. Duis dui felis, tempus in rutrum ut, malesuada vel lacus. Cras ut mauris risus. Proin tempus volutpat feugiat. In tincidunt, orci vel lobortis imperdiet, quam tortor ornare enim, ut tempus est lectus in dui. Donec vel consectetur quam. Cras condimentum neque nibh, id pulvinar nisl pellentesque a. Praesent iaculis mattis mauris vitae rutrum. Maecenas interdum elit ac pulvinar sagittis. Etiam sem ante, rutrum quis enim id, aliquam pulvinar tortor. Maecenas sit amet sollicitudin felis, ac faucibus augue. Ut eu urna porta, ultrices dolor id, tincidunt quam.</p>
+
+				<p>Phasellus pulvinar mollis felis, hendrerit commodo nibh sollicitudin eget. Pellentesque elementum ligula purus, id cursus elit dapibus sit amet. Sed sodales odio vel justo bibendum porttitor. Nam lorem enim, elementum ut elit sit amet, tincidunt sagittis lectus. Aenean dignissim id enim non dapibus. Maecenas non magna non sapien porttitor sagittis. Etiam eget enim elementum, volutpat turpis id, mattis nunc. Ut lacus tortor, bibendum a dictum sed, placerat et lectus. Curabitur cursus urna vel pulvinar ultrices. Nullam tempus feugiat augue, vel tristique nisl egestas at. Aenean tristique ultrices quam eget dapibus. Morbi id convallis augue, vitae cursus ante. Praesent euismod quam quis iaculis pulvinar. Maecenas rutrum sem at ultrices pellentesque. Mauris vitae mattis neque.</p>
+			</div>
+		</div>
+		<div class='row'>
+			<div class='col-sm-12 text-center'>
+				<button class='btn btn-primary' ng-click="closeThisDialog()">Ok</button>
+			</div>
+		</div>
 	</script>
 </div>

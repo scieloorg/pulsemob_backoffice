@@ -16,36 +16,13 @@
 				</div>
 			</div>
 			<div class="panel-body">
-				<!-- <form >
-					<div class='row'>
-						<div class='col-md-3'>
-							<div class='form-group'>
-								<label>Pesquisar</label>
-								<input ng-model='home.filter.value' placeholder='Pesquisar artigos' maxlength='255' class='form-control'>
-							</div>
-						</div>
-						<div class='col-md-9'>
-							<div class='form-group'>
-								<label>&nbsp;</label>
-								<div>
-									<button class='btn btn-primary' ng-click='home.list(home.filter)'>
-										<i class='fa fa-search'></i> Buscar
-									</button>
-								</div>
-							</div>
-						</div>
-					</div>
-
-				<hr ng-if='home.articles' />
-				</form> -->
-
 				<div class="row" ng-if="home.showAs === 'list'">
 					<div class="col-md-12">
 						<div class="table-responsive">
 							<table st-table="home.articlesList" st-safe-src="home.articles" class="table table-striped table-hover">
 								<thead>
 									<tr>
-										<th colspan='5'>
+										<th colspan='6'>
 											<input st-search='' st-delay='0' class='form-control' placeholder='Filtrar' type='text' style='width: 300px' />
 										</th>
 									</tr>
@@ -55,6 +32,7 @@
 										<th width="20%">Edição</th>
 										<th width="140px">Data de Upload</th>
 										<th width="50px"></th>
+										<th width='50px'></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -74,11 +52,16 @@
 											</p>
 										</td>
 										<td>
-											<p>Ano: {{a.publication_date | date:'yyyy'}}</p>
+											<p>Ano: {{a.publication_date | date:'yyyy' : 'UTC'}}</p>
 											<p>Volume: {{a.journal_volume}}</p>
 											<p>Número: {{a.journal_number}}</p>
 										</td>
 										<td>{{a.image_upload_date | date: 'dd/MM/yyyy @ HH:mm'}}</td>
+										<td>
+											<button class='btn btn-default pull-right' ng-click='home.showEditCover([a])'>
+												<i class='fa fa-pencil'></i><span class='hidden-xs'> Editar</span>
+											</button>
+										</td>
 										<td>
 											<button class="btn btn-default pull-right" ng-click="home.prepareRemoveCover(a)">
 												<i class="fa fa-close"></i><span class="hidden-xs"> Remover</span>
@@ -86,14 +69,14 @@
 										</td>
 									</tr>
 									<tr ng-if="home.articlesList.length === 0" style="height: 51px;">
-										<td colspan="5">
+										<td colspan="6">
 											Nenhum resultado encontrado.
 										</td>
 									</tr>
 								</tbody>
 								<tfoot>
 									<tr>
-										<td colspan="5" class="text-center">
+										<td colspan="6" class="text-center">
 											<div st-pagination="" st-items-by-page="10" st-displayed-pages="7"></div>
 										</td>
 									</tr>
@@ -121,12 +104,15 @@
 											</span>
 										</p>
 										<p>
-											Ano {{a.publication_date | date:'yyyy'}} - Volume {{a.journal_volume}} - Número {{a.journal_number}}
+											Ano {{a.publication_date | date:'yyyy' : 'UTC'}} - Volume {{a.journal_volume}} - Número {{a.journal_number}}
 										</p>
 										<p>
 											<small><b>{{a.image_uploader}}</b> - <b>{{a.image_upload_date | date: 'dd/MM/yyyy @ HH:mm'}}</b></small>
 										</p>
 										<p class="text-center">
+											<button class='btn btn-default' ng-click='home.showEditCover([a])'>
+												<i class='fa fa-pencil'></i><span class='hidden-xs'> Editar</span>
+											</button>
 											<button class="btn btn-default" ng-click="home.prepareRemoveCover(a)">
 												<i class="fa fa-close"></i><span class="hidden-xs"> Remover</span>
 											</button>
@@ -160,11 +146,79 @@
 				</span>
 			</p>
 			<p>
-				Ano {{home.currentArticle.publication_date | date:'yyyy'}} - Volume {{home.currentArticle.journal_volume}} - Número {{home.currentArticle.journal_number}}
+				Ano {{home.currentArticle.publication_date | date:'yyyy' : 'UTC'}} - Volume {{home.currentArticle.journal_volume}} - Número {{home.currentArticle.journal_number}}
 			</p>
 			<small>Imagem carregada por <b>{{home.currentArticle.image_uploader}}</b> no dia <b>{{home.currentArticle.image_upload_date | date: 'dd/MM/yyyy @ HH:mm'}}</b>.</small>
 		</div>
 	</div>
+</script>
+
+<script type='text/ng-template' id='edit-dialog'>
+	<br />
+
+	<div class='row'>
+	    <form name='myForm'>
+	        <div class='col-md-6'>
+		        <div ngf-drop ng-model='home.picFile' ng-init="home.picFile=''" ngf-pattern='image/*' class='cropArea'>
+		            <img-crop image='home.picFile | ngfDataUrl' area-type='square' result-image='home.croppedDataUrl' result-image-size='800' ng-init="home.croppedDataUrl=''"></img-crop>
+		        </div>
+	        </div>
+
+	        <div class='col-md-6'>
+		        <img width='100%' ng-src='{{home.croppedDataUrl}}' />
+	        </div>
+	            
+	        <span class='progress' ng-show='progress >= 0'>
+				<div style='width:{{progress}}%' ng-bind="progress + '%'"></div>
+	        </span>
+	        <span ng-show='result'>Upload Successful</span>
+	        <span class='err' ng-show='errorMsg'>{{errorMsg}}</span>
+	    </form>
+	</div>
+	
+	<br />
+
+	<div class='row'>
+		<div class='col-md-12'>
+			<button class='btn btn-info' ngf-select ng-model='home.picFile' accept='image/*'> Selecionar imagem</button>
+			<div class='pull-right'>
+				<button class='btn btn-primary' ng-click='home.save(home.currentArticles, home.croppedDataUrl, home.picFile)'>Salvar</button>
+				<button class='btn btn-default' ng-click='closeThisDialog()'>Fechar</button>
+			</div>
+		</div>
+	</div>
+
+	<style>
+		.cropArea {
+			border: 1px solid #ccc;
+			background: #f1f1f1;
+			width:360px;
+			height:480px;
+		}
+
+		.box-placeholder {
+			margin-bottom: 15px;
+			padding: 20px;
+			border: 1px dashed #dddddd;
+			background: #fafafa;
+			color: #444444;
+		}
+		.box-placeholder > :last-child {
+			margin-bottom: 0;
+		}
+		.box-placeholder-lg {
+			padding-top: 80px;
+			padding-bottom: 80px;
+		}
+
+		.ngdialog.ngdialog-theme-default {
+			padding-top: 100px;
+		}
+		
+		.ngdialog.cover-dialog .ngdialog-content{
+			width : 800px;
+		}
+	</style>
 </script>
 
 <style>

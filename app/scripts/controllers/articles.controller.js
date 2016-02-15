@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sbAdminApp')
-.controller('ArticlesCtrl', ['$scope', '$rootScope', '$stateParams', '$filter', 'ArticleService', 'CategoryService', 'MagazineService', 'SolrService', 'ngDialog', 'Upload', 'toaster', function($scope, $rootScope, $stateParams, $filter, ArticleService, CategoryService, MagazineService, SolrService, ngDialog, Upload, toaster) {
+.controller('ArticlesCtrl', ['$scope', '$rootScope', '$stateParams', '$translate', 'ArticleService', 'CategoryService', 'MagazineService', 'SolrService', 'ngDialog', 'Upload', 'toaster', function($scope, $rootScope, $stateParams, $translate, ArticleService, CategoryService, MagazineService, SolrService, ngDialog, Upload, toaster) {
 	var vm = this;
 
 	vm.init = init;
@@ -63,7 +63,7 @@ angular.module('sbAdminApp')
 
 			toaster.pop('success', 'Capa do artigo removida com sucesso.');
 		}, function(err) {
-			toaster.pop('error', $filter('translate')(err.data));
+			toaster.pop('error', $translate.instant(err.data ? err.data : err.status));
 		});
 	}
 
@@ -105,7 +105,7 @@ angular.module('sbAdminApp')
 
 					toaster.pop('success', 'Capa do artigo salva com sucesso.');
 				}, function(err) {
-					toaster.pop('error', $filter('translate')(err.data));
+					toaster.pop('error', $translate.instant(err.data ? err.data : err.status));
 				});
 			}
 		});		

@@ -12,7 +12,7 @@ angular.module('sbAdminApp')
 		
 			$state.go('login');
 		}, function(err) {
-			toaster.pop('error', $translate.instant(err.data));
+			toaster.pop('error', $translate.instant(err.data ? err.data : err.status));
 		});
 	}
 }]);

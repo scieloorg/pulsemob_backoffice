@@ -99,7 +99,7 @@
 											</p>
 										</td>
 										<td>
-											<p>Ano: {{a.publication_date | date:'yyyy'}}</p>
+											<p>Ano: {{a.publication_date | date:'yyyy' : 'UTC'}}</p>
 											<p>Volume: {{a.journal_volume}}</p>
 											<p>Número: {{a.journal_number}}</p>
 										</td>
@@ -154,7 +154,7 @@
 				</span>
 			</p>
 			<p>
-				Ano {{article.currentArticle.publication_date | date:'yyyy'}} - Volume {{article.currentArticle.journal_volume}} - Número {{article.currentArticle.journal_number}}
+				Ano {{article.currentArticle.publication_date | date:'yyyy' : 'UTC'}} - Volume {{article.currentArticle.journal_volume}} - Número {{article.currentArticle.journal_number}}
 			</p>
 			<small>Imagem carregada por <b>{{article.currentArticle.image_uploader}}</b> em <b>{{article.currentArticle.image_upload_date | date: 'dd/MM/yyyy @ HH:mm'}}</b>.</small>
 		</div>
