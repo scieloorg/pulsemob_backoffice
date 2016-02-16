@@ -1,0 +1,33 @@
+<div class='navbar-default sidebar' role='navigation'>
+	<div class='sidebar-nav navbar-collapse'>
+		<ul class='nav in' id='side-menu'>
+			<p class='text-center img-logo'>
+				<img src='img/logo.png' />
+			</p>
+			<li class='sidebar-search'>
+				<form>
+					<div class='input-group custom-search-form'>
+						<input type='text' class='form-control' ng-model="value" placeholder='Pesquisar artigos'>
+						<span class='input-group-btn'>
+							<button class='btn btn-default' ui-sref='dashboard.articles({value: value})'>
+								<i class='fa fa-search'></i>
+							</button>
+						</span>
+					</div>
+				</form>
+			</li>
+			<li ui-sref-active='active'>
+				<a ui-sref='dashboard.home'><i class='fa fa-dashboard fa-fw'></i> Dashboard</a>
+			</li>
+			<li ui-sref-active='active'>
+				<a ui-sref='dashboard.articles'><i class='fa fa-book fa-fw'></i> Artigos</a>
+			</li>
+			<li ui-sref-active='active'>
+				<a ng-show='$parent.user.profile === 0 || $parent.user.profile === 1' ui-sref='dashboard.users'><i class='fa fa-user fa-fw'></i> Usuários</a>
+			</li>
+		</ul>
+	</div>
+</div> 
+
+
+

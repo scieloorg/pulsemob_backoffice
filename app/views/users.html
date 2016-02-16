@@ -1,0 +1,175 @@
+<div class='row'>
+	<div class='col-md-12'>
+		<h1 class='page-header'>Usuários</h1>
+	</div>
+</div>
+
+<div class='row'>
+	<div class='col-md-12'>
+		<div class='panel panel-default'>
+			<div class='panel-body'>
+				<div class='row'>
+					<div class='col-md-12'>
+						<div class='table-responsive'>
+							<table st-table='user.usersList' st-safe-src='user.users' class='table table-striped table-hover'>
+								<thead>
+									<tr>
+										<th colspan='5'>
+											<input st-search='' st-delay='0' class='form-control' placeholder='Pesquisar' type='text' style='width: 300px' />
+										</th>
+										<th width='50px'>
+											<button class='btn btn-primary pull-right' ng-click='user.prepareCreate()'>
+												<i class='fa fa-plus'></i><span class='hidden-xs'> Novo</span>
+											</button>
+										</th>
+									</tr>
+									<tr>
+										<th width='20%'>Nome</th>
+										<th width='15%'>E-mail</th>
+										<th width='10%'>Perfil</th>
+										<th >Revistas</th>
+										<th width='50px'></th>
+										<th width='50px'></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat='u in user.usersList'>
+										<td>{{u.name}}</td>
+										<td>{{u.email}}</td>
+										<td>{{u.profile | profile}}</td>
+										<td>
+											<span ng-repeat="m in u.magazines | orderBy:'name'">
+												{{m.magazine_name}}<span ng-if="!$last">, </span>
+											</span>
+										</td>
+										<td>
+											<button class='btn btn-default pull-right' ng-click='user.prepareEdit(u)'>
+												<i class='fa fa-pencil'></i><span class='hidden-xs'> Editar</span>
+											</button>
+										</td>
+										<td>
+											<button class='btn btn-default pull-right' ng-click='user.prepareRemove(u)'>
+												<i class='fa fa-close'></i><span class='hidden-xs'> Remover</span>
+											</button>
+										</td>
+									</tr>
+									<tr ng-if='user.usersList.length === 0' style='height: 51px;'>
+										<td colspan='6'>
+											Nenhum resultado encontrado.
+										</td>
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td colspan='6' class='text-center'>
+											<div st-pagination='' st-items-by-page='10' st-displayed-pages='7'></div>
+										</td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type='text/ng-template' id='new-dialog'>
+	<h4>Novo Usuário</h4>
+
+	<form name='forms.form1' role='form'>
+		<p>
+			<div class='row'>
+				<div class='col-md-12'>
+					<div class='form-group'>
+						<label>Nome</label>
+						<input name='fullname' ng-model='user.user.name' maxlength='255' class='form-control' required>
+					</div>
+				</div>
+				<div class='col-md-12'>
+					<div class='form-group'>
+						<label>E-mail</label>
+						<input name='email' ng-model='user.user.email' maxlength='255' class='form-control' required>
+					</div>
+				</div>
+				<div class='col-md-12'>
+					<div class='form-group'>
+						<label>Perfil</label>
+						<select name='profile' ng-disabled='$parent.$parent.user.profile == 1' class='form-control' ng-model='user.user.profile' ng-options='p as (p | profile) for p in user.profiles' ng-init='user.user.profile = $parent.$parent.user.profile == 1 ? 2 : 0' required />
+					</div>
+				</div>
+				<div class='col-md-12'>
+					<div class='form-group'>
+						<label>Revistas</label>
+						<tags-input ng-model='user.user.magazines' replace-spaces-with-dashes='false' display-property='magazine_name' ng-value='id' placeholder='Adicione uma revista'>
+							<auto-complete source='user.loadMagazines($query)' min-length='1'></auto-complete>
+						</tags-input>
+					</div>
+				</div>
+			<!--<div class='col-md-6'>
+				<div class='form-group'>
+					<label>Senha</label>
+					<input ng-model='user.user.password' type='password' maxlength='255' class='form-control'>
+				</div>
+			</div>
+			<div class='col-md-6'>
+				<div class='form-group'>
+					<label>Confirmar senha</label>
+					<input ng-model='user.user.confirm_password' type='password' maxlength='255' class='form-control'>
+				</div>
+			</div>-->
+		</div>
+	</p>
+
+	<button type='submit' class='btn btn-primary' ng-click='user.create(user.user)'>Salvar</button>
+	<button class='btn btn-default' ng-click='closeThisDialog()'>Fechar</button>
+</form>
+</script>
+
+<script type='text/ng-template' id='edit-dialog'>
+	<h4>Editar Usuário</h4>
+
+	<form name='forms.form1' role='form'>
+		<p>
+			<div class='row'>
+				<div class='col-md-12'>
+					<div class='form-group'>
+						<label>Nome</label>
+						<input name='fullname' ng-model='user.user.name' maxlength='255' class='form-control' required>
+					</div>
+				</div>
+				<div class='col-md-12'>
+					<div class='form-group'>
+						<label>E-mail</label>
+						<input name='email' ng-model='user.user.email' maxlength='255' class='form-control' required>
+					</div>
+				</div>
+				<div class='col-md-12'>
+					<div class='form-group'>
+						<label>Perfil</label>
+						<select name='profile' ng-disabled='$parent.$parent.user.profile == 1' class='form-control' ng-model='user.user.profile' ng-options='p as (p | profile) for p in user.profiles' required />
+					</div>
+				</div>
+				<div class='col-md-12'>
+					<div class='form-group'>
+						<label>Revistas</label>
+						<tags-input ng-model='user.user.magazines' replace-spaces-with-dashes='false' display-property='magazine_name' placeholder='Adicione uma revista'>
+							<auto-complete source='user.loadMagazines($query)' min-length='1'></auto-complete>
+						</tags-input>
+					</div>
+				</div>
+			</div>
+		</p>
+
+		<button type='submit' class='btn btn-primary' ng-click='user.edit(user.user)'>Salvar</button>
+		<button class='btn btn-default' ng-click='closeThisDialog()'>Fechar</button>
+	</form>
+</script>
+
+<script type="text/ng-template" id="remove-dialog">
+	<h5>Confirma a exclusão do usuário?</h5>
+
+	<button type="button" ng-click="confirm()" class="btn btn-primary">Sim</button>
+	<button type="button" ng-click="closeThisDialog()" class="btn btn-default">Não</button>
+</script>

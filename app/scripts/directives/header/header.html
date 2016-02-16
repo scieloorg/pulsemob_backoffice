@@ -1,0 +1,93 @@
+<div>
+	<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+		<div class="navbar-header">
+
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#">SciELO - Scientific Electronic Library Online</a>
+		</div>
+
+		<ul class="nav navbar-top-links navbar-right">
+			<li class="dropdown">
+				<a href class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+					<i class="fa fa-user fa-fw"></i> {{user.name}}
+					<i class="fa fa-caret-down"></i>
+				</a>
+				<ul class="dropdown-menu dropdown-user">
+					<li>
+						<a href ng-click='header.prepareChangePassword()'>
+							<i class="fa fa-key fa-fw"></i> Alterar Senha
+						</a>
+						<a href ng-click='header.showPolicy()'>
+							<i class='fa fa-edit fa-fw'></i> Políticas de Uso
+						</a>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<a ng-click='header.logout()'><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+
+		<sidebar></sidebar>
+	</nav>
+
+	<script type='text/ng-template' id='change-password-dialog'>
+		<h4>Alterar Senha</h4>
+
+		<form name='changePassForm' role='form' ng-submit='header.changePassword(changePassForm)'>
+			<p>
+				<div class='row'>
+					<div class='col-md-12'>
+						<div class='form-group'>
+							<label>Senha antiga</label>
+							<input type='password' name='oldPassword' ng-model='header.password.current_password' maxlength='255' class='form-control' required>
+						</div>
+					</div>
+					<div class='col-md-12'>
+						<div class='form-group'>
+							<label>Nova senha</label>
+							<input type='password' name='newPassword' ng-model='header.password.new_password' maxlength='255' class='form-control' required>
+						</div>
+					</div>
+					<div class='col-md-12'>
+						<div class='form-group'>
+							<label>Confirmar nova senha</label>
+							<input type='password' name='confirmPassword' ng-model='header.password.confirm' maxlength='255' class='form-control' required>
+							<span ng-style="{'visibility': header.password_error?'visible':'hidden'}" style='color: red; font-size: small; font-weight: bold;'>As senhas não coincidem</span>
+						</div>
+					</div>
+				</div>
+			</p>
+
+			<button type='submit' class='btn btn-primary'>Salvar</button>
+			<button class='btn btn-default' ng-click='closeThisDialog()'>Fechar</button>
+		</form>
+	</script>
+
+	<script type="text/ng-template" id='policyDialog'>
+		<h1>Termo de Compromisso</h1>
+		<br>
+		<div class='panel panel-default'>
+			<div class='panel-body' style='max-height: 300px; overflow-y: scroll;'>
+				<div class='row'>
+					<div class='col-sm-12'>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut mattis vehicula nisl hendrerit luctus. Donec commodo placerat ex. Donec tempus lobortis nulla. Duis dui felis, tempus in rutrum ut, malesuada vel lacus. Cras ut mauris risus. Proin tempus volutpat feugiat. In tincidunt, orci vel lobortis imperdiet, quam tortor ornare enim, ut tempus est lectus in dui. Donec vel consectetur quam. Cras condimentum neque nibh, id pulvinar nisl pellentesque a. Praesent iaculis mattis mauris vitae rutrum. Maecenas interdum elit ac pulvinar sagittis. Etiam sem ante, rutrum quis enim id, aliquam pulvinar tortor. Maecenas sit amet sollicitudin felis, ac faucibus augue. Ut eu urna porta, ultrices dolor id, tincidunt quam.</p>
+
+						<p>Phasellus pulvinar mollis felis, hendrerit commodo nibh sollicitudin eget. Pellentesque elementum ligula purus, id cursus elit dapibus sit amet. Sed sodales odio vel justo bibendum porttitor. Nam lorem enim, elementum ut elit sit amet, tincidunt sagittis lectus. Aenean dignissim id enim non dapibus. Maecenas non magna non sapien porttitor sagittis. Etiam eget enim elementum, volutpat turpis id, mattis nunc. Ut lacus tortor, bibendum a dictum sed, placerat et lectus. Curabitur cursus urna vel pulvinar ultrices. Nullam tempus feugiat augue, vel tristique nisl egestas at. Aenean tristique ultrices quam eget dapibus. Morbi id convallis augue, vitae cursus ante. Praesent euismod quam quis iaculis pulvinar. Maecenas rutrum sem at ultrices pellentesque. Mauris vitae mattis neque.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class='row'>
+			<div class='col-sm-12 text-center'>
+				<button class='btn btn-primary' ng-click="closeThisDialog()">Ok</button>
+			</div>
+		</div>
+	</script>
+</div>

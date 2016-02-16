@@ -1,0 +1,16 @@
+{
+	"INVALID_CREDENTIALS": "Credenciais inválidas.",
+	"TOKEN_EXPIRED": "Sessão expirada.",
+	"TOKEN_INVALID": "Token inválido.",
+	"USER_NOT_FOUND": "Usuário não encontrado.",
+	"USER_ALREADY_EXISTS": "Usuário já existente.",
+	"NOT_ALLOWED_FOR_PROFILE": "NOT_ALLOWED_FOR_PROFILE",
+	"ARTICLE_NOT_FOUND": "Artigo não encontrado.",
+	"UNEXPECTED_ERROR": "Erro inesperado.",
+	"SOLR_COMMUNICATION_FAILURE": "Falha de comunicação com a base de artigos.",
+	"TOKEN_MISSING": "TOKEN_MISSING",
+	"NOT_ALLOWED_FOR_PROFILE": "Seu perfil não permite que você efetue essa operação.",
+	"0": "O servidor está temporariamente indisponível.",
+
+	"": ""
+}

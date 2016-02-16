@@ -1,0 +1,266 @@
+<div class='row'>
+	<div class='col-md-12'>
+		<h1 class='page-header'>Artigos</h1>
+	</div>
+</div>
+
+<div class='row'>
+	<div class='col-md-12'>
+		<div class='panel panel-default'>
+			<div class='panel-body'>
+				<form >
+					<div class='row'>
+						<div class='col-md-3'>
+							<div class='form-group'>
+								<label>Pesquisar</label>
+								<input ng-model='article.filter.value' placeholder='Pesquisar artigos' maxlength='255' class='form-control'>
+							</div>
+						</div>
+						<div class='col-md-9'>
+							<div class='form-group'>
+								<label>&nbsp;</label>
+								<div>
+									<button class='btn btn-primary' ng-click='article.list(article.filter)'>
+										<i class='fa fa-search'></i> Buscar
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-md-4'>
+							<div class='form-group'>
+								<label>Categoria</label>
+								<select class='form-control' ng-model='article.filter.category' ng-options='category.id as category.category_name_pt for category in article.categories'></select>
+							</div>
+						</div>
+						<div class='col-md-4'>
+							<div class='form-group'>
+								<label>Revista</label>
+								<input type='text' ng-model='article.filter.magazine' typeahead='magazine as magazine.magazine_name for magazine in article.magazines | filter:$viewValue | limitTo:8' typeahead-show-hint='true' class='form-control'>
+							</div>
+						</div>
+						<div class='col-md-2'>
+							<div class='form-group'>
+								<label>Exibir</label>
+								<select class='form-control' ng-model='article.filter.cover_option' ng-init="article.filter.cover_option='2'">
+									<option value='2'>Todos</option>
+									<option value='1'>Com capa</option>
+									<option value='0'>Sem capa</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</form>
+
+				<hr ng-if='article.articles' />
+
+				<div class='row' ng-if='article.articles'>
+					<div class='col-md-12'>
+						<div class='table-responsive'>
+							<table st-table='article.articlesList' st-safe-src='article.articles' class='table table-striped table-hover'>
+								<thead>
+									<tr>
+										<th colspan='2'>
+											<input st-search='' st-delay='0' class='form-control' placeholder='Filtrar' type='text' style='width: 300px' />
+										</th>
+										<th colspan='4'>
+											<button class='btn btn-default pull-right' type='submit' ng-click='article.articles = null' style='margin-left: 5px;'>
+												<i class='fa fa-minus'></i><span class='hidden-xs'> Limpar resultados
+											</button>
+											<button class='btn btn-default pull-right' type='submit' ng-click='article.showEditCover(article.selectedArticles)' ng-show='article.selectedArticles.length > 0'>
+												<i class='fa fa-pencil'></i><span class='hidden-xs'> Editar selecionados
+											</button>
+										</th>
+									</tr>
+									<tr>
+										<th class='cover-list'>Capa</th>
+										<th>Artigos</th>
+										<th width='20%'>Edição</th>
+										<th width='140px'>Data do Upload</th>
+										<th width='50px'></th>
+										<th width='50px'></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat='a in article.articlesList' ng-click='article.selectRow(a)' ng-class='{ "selected": a.selected }'>
+										<td>
+											<a href ng-click='article.showDetails(a)'>
+												<img ng-if='a.image_upload_date' class='cover-list' ng-src='{{article.coverPath(a)}}'>
+											</a>
+										</td>
+										<td>
+											<h4>{{a.original_title}}</h4>
+											<h5>{{a.journal_title}}</h5>
+											<p>
+												<span>
+													<span ng-repeat="a in a.authors">{{a}}<span ng-if="!$last">, </span></span>
+												</span>
+											</p>
+										</td>
+										<td>
+											<p>Ano: {{a.publication_date | date:'yyyy' : 'UTC'}}</p>
+											<p>Volume: {{a.journal_volume}}</p>
+											<p>Número: {{a.journal_number}}</p>
+										</td>
+										<td>{{a.image_upload_date | date: 'dd/MM/yyyy @ HH:mm'}}</td>
+										<td>
+											<button class='btn btn-default pull-right' ng-click='article.showEditCover([a])'>
+												<i class='fa fa-pencil'></i><span class='hidden-xs'> Editar</span>
+											</button>
+										</td>
+										<td>
+											<button ng-disabled='a.image_upload_date == undefined'class='btn btn-default pull-right' ng-click='article.prepareRemove(a)'>
+												<i class='fa fa-close'></i><span class='hidden-xs'> Remover</span>
+											</button>
+										</td>
+									</tr>
+									<tr ng-if='article.articlesList.length === 0' style='height: 51px;'>
+										<td colspan='6'>
+											Nenhum resultado encontrado.
+										</td>
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td colspan='6' class='text-center'>
+											<div st-pagination='' st-items-by-page='10' st-displayed-pages='7'></div>
+										</td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type='text/ng-template' id='details-dialog'>
+	<br />
+
+	<div class='text-center'>
+		<img ng-src='{{article.coverPath(article.currentArticle)}}' style='max-width: 100%; max-height: 100%;'/>
+	</div>
+
+	<div class='row'>
+		<div class='col-md-12 text-center'>
+			<h3>{{article.currentArticle.original_title}}</h3>
+			<h4>{{article.currentArticle.journal_title}}</h4>
+			<p>
+				<span>
+					<span ng-repeat='a in article.currentArticle.authors'>{{a}}<span ng-if='!$last'>, </span></span>
+				</span>
+			</p>
+			<p>
+				Ano {{article.currentArticle.publication_date | date:'yyyy' : 'UTC'}} - Volume {{article.currentArticle.journal_volume}} - Número {{article.currentArticle.journal_number}}
+			</p>
+			<small>Imagem carregada por <b>{{article.currentArticle.image_uploader}}</b> em <b>{{article.currentArticle.image_upload_date | date: 'dd/MM/yyyy @ HH:mm'}}</b>.</small>
+		</div>
+	</div>
+</script>
+
+<script type='text/ng-template' id='edit-dialog'>
+	<br />
+
+	<div class='row'>
+	    <form name='myForm'>
+	        <div class='col-md-6'>
+		        <div ngf-drop ng-model='article.picFile' ng-init="article.picFile=''" ngf-pattern='image/*' class='cropArea'>
+		            <img-crop image='article.picFile | ngfDataUrl' area-type='square' result-image='article.croppedDataUrl' result-image-size='800' ng-init="article.croppedDataUrl=''"></img-crop>
+		        </div>
+	        </div>
+
+	        <div class='col-md-6'>
+		        <img width='100%' ng-src='{{article.croppedDataUrl}}' />
+	        </div>
+	            
+	        <span class='progress' ng-show='progress >= 0'>
+				<div style='width:{{progress}}%' ng-bind="progress + '%'"></div>
+	        </span>
+	        <span ng-show='result'>Upload Successful</span>
+	        <span class='err' ng-show='errorMsg'>{{errorMsg}}</span>
+	    </form>
+	</div>
+	
+	<br />
+
+	<div class='row'>
+		<div class='col-md-12'>
+			<button class='btn btn-info' ngf-select ng-model='article.picFile' accept='image/*'> Selecionar imagem</button>
+			<div class='pull-right'>
+				<button class='btn btn-primary' ng-click='article.save(article.currentArticles, article.croppedDataUrl, article.picFile)'>Salvar</button>
+				<button class='btn btn-default' ng-click='closeThisDialog()'>Fechar</button>
+			</div>
+		</div>
+	</div>
+
+	<style>
+		.cropArea {
+			border: 1px solid #ccc;
+			background: #f1f1f1;
+			width:360px;
+			height:480px;
+		}
+
+		.box-placeholder {
+			margin-bottom: 15px;
+			padding: 20px;
+			border: 1px dashed #dddddd;
+			background: #fafafa;
+			color: #444444;
+		}
+		.box-placeholder > :last-child {
+			margin-bottom: 0;
+		}
+		.box-placeholder-lg {
+			padding-top: 80px;
+			padding-bottom: 80px;
+		}
+
+		.ngdialog.ngdialog-theme-default {
+			padding-top: 100px;
+		}
+		
+		.ngdialog.cover-dialog .ngdialog-content{
+			width : 800px;
+		}
+	</style>
+</script>
+
+<script type="text/ng-template" id="remove-dialog">
+	<h5>Confirma a exclusão da capa do artigo?</h5>
+
+	<button type="button" ng-click="confirm()" class="btn btn-primary">Sim</button>
+	<button type="button" ng-click="closeThisDialog()" class="btn btn-default">Não</button>
+</script>
+
+<style>
+	tr.selected {
+		background-color: #d9edf7 !important;
+	}
+
+	.cropArea {
+	    background: #E4E4E4;
+	    overflow: hidden;
+	    width:600px;
+	    height:420px;
+	}
+
+	form .progress {
+	    line-height: 15px;
+	}
+
+	.progress {
+	    display: inline-block;
+	    width: 100px;
+	    border: 3px groove #CCC;
+	}
+
+	.progress div {
+	    font-size: smaller;
+	    background: orange;
+	    width: 0;
+	}
+</style>
