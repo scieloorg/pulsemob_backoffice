@@ -1,62 +1,56 @@
-## SB Admin v2.0 rewritten in AngularJS
-
-[![Join the chat at https://gitter.im/start-angular/sb-admin-angular](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/start-angular/sb-admin-angular?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-This project is a port of the famous Free Admin Bootstrap Theme [SB Admin v2.0](http://startbootstrap.com/template-overviews/sb-admin-2/) to Angular Theme.
-
-Find out more [Free Angular Themes at StartAngular.com](http://www.startangular.com/).
-
-## Installation
-####1. Clone this project or Download that ZIP file
+# Pulsemob Backoffice
+Before run the steps presented here, you should follow [these instructions](https://github.com/Infobase/pulsemob_webservices).
+## 1. Go to a suitable installation directory and checkout the pulsemob backoffice source:
 
 ```sh
-$ git clone https://github.com/start-angular/sb-admin-angular.git
+$ git clone git://github.com/Infobase/pulsemob_backoffice.git
 ```
 
-####2.  Make sure you have [bower](http://bower.io/), [grunt-cli](https://www.npmjs.com/package/grunt-cli) and  [npm](https://www.npmjs.org/) installed globally
- 
- 
+## 2. Set server and solr urls
+Open *app.js*.
 ```sh
-$ sudo apt-get install npm
+# Replace /folder/root for pulsemob_backoffice root path.
+$ vim /folder/root/pulsemob_backoffice/app/scripts/app.js
+```
+
+Change the lines 244, 245 e 246 for:
+```js
+"WS": "http://url_base/webservices/backoffice",
+"BASE_URL": "http://url_base",
+"SOLR_URL": "http://url_base"
+```
+Replace "*url_base*" for your url base.
+
+## 3. Building
+Install nodejs, npm, grunt and bower.
+```sh
+$ sudo yum install nodejs npm
 $ sudo npm install -g grunt-cli
 $ sudo npm install -g bower
 ```
-####3. On the command prompt run the following commands
-
+Build.
 ```sh
-$ cd `project-directory`
+# Open pulsemob_backoffice root (replace /folder/root for pulsemob_backoffice root path).
+$ cd /folder/root/pulsemob_backoffice
+$ npm install
+# Add --allow-root if you're running as root.
+$ bower install
+# Add --allow-root if you're running as root.
+$ bower update
+$ grunt build
 ```
-- bower install is ran from the postinstall
+
+## 4. Setting Nginx
+Open *pulsemob.conf* in Nginx folder.
 ```sh
-$ npm install 
+$ vim /etc/nginx/conf.d/pulsemob.conf
 ```
-- a shortcut for `grunt serve`
-```sh
-$ npm start
+Locate the following block and change the *alias* parameter according to your pulsemob_backoffice root path.
+
+```conf
+# Pulsemob backoffice settings.
+location /pulsemob_backoffice {
+    alias /folder/root/pulsemob_backoffice/dist;
+    index index.html index.htm;
+}
 ```
-- a shortcut for `grunt serve:dist` to minify the files for deployment
-```sh
-$ npm run dist 
-```
-
-
-**Note:**
-If you get this following error, 
-```text
-Error: EACCES, permission denied '.config/configstore/insight-bower.yml'
-You don't have access to this file.
-```
-changing ownner .config
-
-```sh
-sudo chown -R [user name] ~/.config
-```
-
-
-## Roadmap
-
-- Add sample AJAX calls and make the directives more modular
-
-### Automation tools
-
-- [Grunt](http://gruntjs.com/)
